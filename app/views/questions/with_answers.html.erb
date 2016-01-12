@@ -1,0 +1,24 @@
+<h2 class="header-font">Questions with answers</h2><br />
+<ul class="nav nav-pills link-font">
+  <li><%= link_to 'All questions', questions_path %></li>
+  <li class="disabled"><%= link_to 'Questions with answers', questions_with_answers_path %></li>
+  <li><%= link_to 'Questions without answers', questions_without_answers_path %></li><br /><br /><br />
+</ul>
+<% if !@questions_with_answers || @questions_with_answers == [] %>
+  <div class="large-font">
+    There are not any answers yet.
+  </div><br />
+<% else %>
+  <% @questions = @questions_with_answers %>
+  <%= render'questions/shared_index/categories_turn_over', categories_array: @question_categories %><br /><br />
+  <% if can? :access, :rails_admin %>
+    <div class="large-font">
+      <%= link_to 'New Question', rails_admin.new_path('question') %>
+    </div>
+  <% end %><br />
+<% end %><br /><br />
+<% if can? :access, :rails_admin %>
+  <div class="large-font">
+    <%= link_to 'New Category', rails_admin.new_path('question_category') %>
+  </div>
+<% end %>

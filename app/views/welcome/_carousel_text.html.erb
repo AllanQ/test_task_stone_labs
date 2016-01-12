@@ -1,0 +1,31 @@
+<div class="carousel-notice">
+  <p class="notice text-primary"><%= @notice %></p>
+  <p class="alert text-error"><%= @alert %></p>
+</div>
+<% if user_signed_in? %>
+  <h2>Hello, <%= current_user.name %>!
+    <% if current_user %>
+      <% if current_user.activated == false %>
+        <%= 'You are not activated yet' %>
+      <% end %>
+    <% end %>
+  </h2><br />
+  <h3>
+    <% if can? :access, :rails_admin %>
+      <td><%= link_to 'Administration', rails_admin_path %></span><span class="tab2"></span></td>
+    <% end %>
+    <% if can? :index, Question %>
+      <td><%= link_to 'Questions', questions_path %></span><span class="tab2"></span></td>
+    <% end %>
+    <% if current_user.activated == true %>
+      <td><%= link_to 'Edit profile', edit_user_registration_path %></span><span class="tab2"></span></td>
+    <% end %>
+      <td><%= link_to 'LOG OUT', destroy_user_session_path, method: :delete  %></td>
+  </h3>
+<% else %>
+  <h2>Hello, Guest!</h2><br />
+  <h3>
+    To get access - <%= link_to 'LOG IN', new_user_session_path %>, if you have an account,
+    or <%= link_to 'SIGN UP', new_user_registration_path %> - if you haven't.<br />
+  </h3>
+<% end %>

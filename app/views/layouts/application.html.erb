@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <%= favicon_link_tag %>
+  <title>Questionnaire</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <%= render 'layouts/top_navigation' %>
+  <% if current_page?('/') %>
+    <%= render 'welcome/carousel' %>
+  <% end %><br /><br /><br /><br />
+  <p class="notice text-primary notice-alert"><%= notice %></p>
+  <p class="alert text-error notice-alert"><%= alert %></p>
+
+  <%= yield %>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+<% categories_array = QuestionCategory.where(question_category_id: category.id) %>
+<%= render'questions/shared_index/questions', category: category %>
+<%= render'questions/shared_index/categories_turn_over', categories_array: categories_array %>
+

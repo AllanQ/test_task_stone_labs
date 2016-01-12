@@ -1,0 +1,25 @@
+<ul class="questions-font">
+  <% @questions.each do |question| %>
+    <% if question.question_category_id == category.id %>
+      <li>
+        <td>
+          <% answer = Answer.find_by(question_id: question.id, user_id: current_user.id)  %>
+          <% if answer %>
+            <%= link_to question.text, question_path(question), class: 'text-success' %>
+          <% else %>
+            <%= link_to question.text, question_path(question), class: 'text-warning' %>
+          <% end %>
+        </td>
+        <% if can? :access, :rails_admin %>
+          <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question', id: question.id),
+                        class: 'btn btn-mini btn-warning' %></td>
+        <% end %>
+        <% if can? :destroy, question %>
+          <td><%= link_to 'Destroy', question_path(question),
+                      method: :delete,
+                      data: { confirm: 'Are you sure?' }, class: 'btn btn-mini btn-danger' %></td>
+        <% end %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

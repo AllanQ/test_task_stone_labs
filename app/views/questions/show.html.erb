@@ -1,0 +1,32 @@
+<p>
+  <%= @question_category %>
+</p>
+<h2 class="header-font"><%= @question.text %></h2>
+<% if @answer %>
+  <%= form_for @answer, url: answer_path(@answer), method: :patch do |f| %>
+    <div class="field">
+      <%= f.text_area :text %>
+    </div><br />
+    <div>
+      <%= f.submit 'Rewrite the answer', class: 'btn btn-warning' %>
+    </div>
+  <% end %><br />
+  <div>
+    <%= link_to 'Destroy', answer_path(@answer),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+  </div>
+<% else %><br />
+  <%= form_for :answer, url: answers_path do |f| %>
+    <div class="field">
+      <%= f.text_area :text %><br />
+      <%= f.hidden_field :question_id, value: @question.id %>
+    </div><br />
+    <div>
+      <%= f.submit 'Save the answer', class: 'btn btn-success' %>
+    </div>
+  <% end %>
+<% end %><br /><br />
+<div>
+  <%= link_to 'Back', questions_path %>
+</div>
