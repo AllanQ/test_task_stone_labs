@@ -2,7 +2,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 @font-face { font-family: DS-Note; src: font-url('DS-Note.ttf'); }
-@font-face { font-family: Liana; src: font-url('Liana.ttf'); }
 @font-face { font-family: PFSquareSansPro-ExtraBlackItalic; src: font-url('PFSquareSansPro-ExtraBlackItalic.ttf'); }
 @font-face { font-family: segoepr; src: font-url('segoepr.ttf'); }
 @import "questions";
@@ -25,7 +24,7 @@ body {
 }
 .notice-alert {
   font-family: segoepr;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
 }
 
