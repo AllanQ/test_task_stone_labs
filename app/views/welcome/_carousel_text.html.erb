@@ -15,7 +15,7 @@
       <td><%= link_to 'Administration', rails_admin_path %></span><span class="tab2"></span></td>
     <% end %>
     <% if can? :index, Question %>
-      <td><%= link_to 'Questions', questions_path %></span><span class="tab2"></span></td>
+      <td><%= link_to 'Questions', questions_path, class: 'red' %></span><span class="tab2"></span></td>
     <% end %>
     <% if current_user.activated == true %>
       <td><%= link_to 'Edit profile', edit_user_registration_path %></span><span class="tab2"></span></td>
