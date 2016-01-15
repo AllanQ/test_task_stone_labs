@@ -5,11 +5,13 @@ class QuestionsController < ApplicationController
   def index
     @question_categories = QuestionCategory.main
     @questions_all = Question.all
+    @type_questions = 'All questions'
   end
 
   def with_answers
     @question_categories = QuestionCategory.main
     @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
+    @type_questions = 'Questions with answers'
   end
 
   def without_answers
@@ -17,12 +19,38 @@ class QuestionsController < ApplicationController
     @questions_all = Question.all
     @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
     @questions_without_answers = @questions_all - @questions_with_answers
+    @type_questions = 'Questions without answers'
   end
 
   def show
     category = QuestionCategory.find(@question.question_category_id)
     @question_category = category_full_name(category)
     @answer = Answer.find_by(question_id: @question.id, user_id: current_user.id)
+    @type_questions = params[:type_questions]
+    categories_array = QuestionCategory.main
+    @questions_all = Question.all
+    @questions = []
+    case @type_questions
+      when 'All questions'
+        questions_all(categories_array)
+      when 'Questions with answers'
+        questions_with_answers(categories_array)
+      when 'Questions without answers'
+        questions_without_answers(categories_array)
+    end
+    i = @questions.index(@question)
+    if i == @questions.length - 1
+      @next_question = nil
+      @previous_question = @questions[i-1]
+    else
+      if i == 0
+        @next_question = @questions[i+1]
+        @previous_question = nil
+      else
+        @next_question = @questions[i+1]
+        @previous_question = @questions[i-1]
+      end
+    end
   end
 
   def destroy
@@ -42,5 +70,43 @@ class QuestionsController < ApplicationController
       parent_id = category.question_category_id
     end
     name
+  end
+
+  def questions_all(categories_array)
+    categories_array.each do |category|
+      @questions_all.each do |question|
+        if question.question_category_id == category.id
+          @questions << question
+        end
+      end
+      categories_array = QuestionCategory.where(question_category_id: category.id)
+      questions_all(categories_array)
+    end
+  end
+
+  def questions_with_answers(categories_array)
+    categories_array.each do |category|
+      @questions_all.each do |question|
+        if (question.question_category_id == category.id &&
+            Answer.find_by(question_id: question.id, user_id: current_user.id))
+          @questions << question
+        end
+      end
+      categories_array = QuestionCategory.where(question_category_id: category.id)
+      questions_with_answers(categories_array)
+    end
+  end
+
+  def questions_without_answers(categories_array)
+    categories_array.each do |category|
+      @questions_all.each do |question|
+        if (question.question_category_id == category.id &&
+            !Answer.find_by(question_id: question.id, user_id: current_user.id))
+          @questions << question
+        end
+      end
+      categories_array = QuestionCategory.where(question_category_id: category.id)
+      questions_without_answers(categories_array)
+    end
   end
 end

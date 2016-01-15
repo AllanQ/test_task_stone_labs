@@ -1,4 +1,3 @@
 <% categories_array = QuestionCategory.where(question_category_id: category.id) %>
-<%= render'questions/shared_index/questions', category: category %>
-<%= render'questions/shared_index/categories_turn_over', categories_array: categories_array %>
-
+<%= render'questions/shared_index/questions', category: category, type_questions: type_questions %>
+<%= render'questions/shared_index/categories_turn_over', categories_array: categories_array, type_questions: type_questions %>

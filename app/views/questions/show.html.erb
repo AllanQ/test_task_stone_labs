@@ -1,12 +1,25 @@
-<p>
+<p class="header-font">
+  <%= @type_questions %>
+</p>
+<p class="segoepr-font text-primary">
   <%= @question_category %>
 </p>
 <h2 class="header-font"><%= @question.text %></h2>
 <% if @answer %>
   <%= form_for @answer, url: answer_path(@answer), method: :patch do |f| %>
-    <div class="field">
-      <%= f.text_area :text, rows: 10, class: 'text-area' %>
-    </div><br />
+    <div class="row">
+      <div class="col-md-3">
+        <%= link_to 'Previous', question_path(@previous_question, type_questions: @type_questions),
+                    class: 'btn btn-primary' if @previous_question %>
+      </div>
+      <div class="field col-md-6">
+        <%= f.text_area :text, rows: 10, class: 'text-area' %>
+      </div>
+      <div class="col-md-3">
+        <%= link_to 'Next', question_path(@next_question, type_questions: @type_questions),
+                    class: 'btn btn-success' if @next_question %>
+      </div>
+    </div> <br /><br /><br />
     <div>
       <%= f.submit 'Rewrite the answer', class: 'btn btn-warning' %>
     </div>
@@ -18,15 +31,32 @@
   </div>
 <% else %><br />
   <%= form_for :answer, url: answers_path do |f| %>
-    <div class="field">
+    <div class="row">
+      <div class="col-md-3">
+        <%= link_to 'Previous', question_path(@previous_question, type_questions: @type_questions),
+                        class: 'btn btn-primary' if @previous_question %>
+      </div>
+    <div class="field col-md-6">
       <%= f.text_area :text, rows: 10, class: 'text-area' %><br />
       <%= f.hidden_field :question_id, value: @question.id %>
-    </div><br />
+    </div>
+       <div class="col-md-3">
+         <%= link_to 'Next', question_path(@next_question, type_questions: @type_questions),
+                        class: 'btn btn-success' if @next_question %>
+       </div>
+    </div> <br /><br /><br />
     <div>
       <%= f.submit 'Save the answer', class: 'btn btn-success' %>
     </div>
   <% end %>
 <% end %><br /><br />
 <div>
-  <%= link_to 'Back', questions_path %>
+  <% case @type_questions %>
+    <% when 'All questions' %>
+      <%= link_to 'Back', questions_path, class: 'btn btn-primary' %>
+    <% when 'Questions with answers' %>
+      <%= link_to 'Back', questions_with_answers_path, class: 'btn btn-primary' %>
+    <% when 'Questions without answers' %>
+      <%= link_to 'Back', questions_without_answers_path, class: 'btn btn-primary' %>
+  <% end %>
 </div>

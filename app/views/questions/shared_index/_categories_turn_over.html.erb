@@ -1,4 +1,4 @@
-<ul class="large-font text-left">
+<ul class="segoepr-font text-left">
   <% categories_array.each do |category| %>
     <li class="text-primary">
       <td class="text-primary"><%= category.name %></td>
@@ -13,6 +13,6 @@
                       class: 'btn btn-mini btn-danger' %></td>
       <% end %>
     </li>
-    <%= render'questions/shared_index/category_or_questions', category: category %>
+    <%= render'questions/shared_index/category_or_questions', category: category, type_questions: type_questions %>
   <% end %>
 </ul>

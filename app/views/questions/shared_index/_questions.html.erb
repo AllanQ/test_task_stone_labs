@@ -1,13 +1,17 @@
-<ul class="questions-font">
+<ul class="segoepr-font">
   <% @questions.each do |question| %>
     <% if question.question_category_id == category.id %>
       <li>
         <td>
           <% answer = Answer.find_by(question_id: question.id, user_id: current_user.id)  %>
           <% if answer %>
-            <%= link_to question.text, question_path(question), class: 'text-success' %>
+            <%= link_to question.text,
+                        question_path(question, type_questions: type_questions),
+                        class: 'text-success' %>
           <% else %>
-            <%= link_to question.text, question_path(question), class: 'text-warning' %>
+            <%= link_to question.text,
+                          question_path(question, type_questions: type_questions),
+                          class: 'text-warning' %>
           <% end %>
         </td>
         <% if can? :access, :rails_admin %>

@@ -1,12 +1,12 @@
 <h2 class="header-font">All questions</h2><br />
 <% if @question_categories.count == 0 %>
-  <div class="large-font">
+  <div class="segoepr-font">
     There are not neither categories nor questions yet.<br />
     Create at least one category, before create a question.
   </div><br />
 <% else %>
   <% if @questions.count == 0  %>
-    <div class="large-font">
+    <div class="segoepr-font">
       There are not any questions yet.
     </div><br />
   <% else %>
@@ -16,16 +16,17 @@
         <li><%= link_to 'Questions with answers', questions_with_answers_path %></li>
         <li><%= link_to 'Questions without answers', questions_without_answers_path %></li><br /><br /><br />
       </ul>
-      <%= render'questions/shared_index/categories_turn_over', categories_array: @question_categories %><br />
+      <%= render'questions/shared_index/categories_turn_over',
+                categories_array: @question_categories, type_questions: @type_questions %><br />
   <% end %><br />
   <% if can? :access, :rails_admin %>
-    <div class="large-font">
+    <div class="segoepr-font">
       <%= link_to 'New Question', rails_admin.new_path('question') %>
     </div>
   <% end %><br />
   <% end %><br />
 <% if can? :access, :rails_admin %>
-  <div class="large-font">
+  <div class="segoepr-font">
     <%= link_to 'New Category', rails_admin.new_path('question_category') %>
   </div>
 <% end %>
