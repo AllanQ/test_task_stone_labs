@@ -10,8 +10,19 @@
   </div><br />
 <% else %>
   <% @questions = @questions_with_answers %>
+
+
+
+
+
+
+
+
+
   <%= render'questions/shared_index/categories_turn_over',
             categories_array: @question_categories, type_questions: @type_questions %><br /><br />
+
+
   <% if can? :access, :rails_admin %>
     <div class="segoepr-font">
       <%= link_to 'New Question', rails_admin.new_path('question') %>

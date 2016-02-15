@@ -3,23 +3,23 @@ class QuestionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @question_categories = QuestionCategory.main
-    @questions_all = Question.all
     @type_questions = 'All questions'
-  end
-
-  def with_answers
+    @type_questions = params[:type_questions] if params[:type_questions]
     @question_categories = QuestionCategory.main
-    @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
-    @type_questions = 'Questions with answers'
-  end
-
-  def without_answers
-    @question_categories = QuestionCategory.main
-    @questions_all = Question.all
-    @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
-    @questions_without_answers = @questions_all - @questions_with_answers
-    @type_questions = 'Questions without answers'
+    case @type_questions
+      when 'All questions'
+        @questions_all = Question.all
+      when 'Questions with answers'
+        @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
+      when 'Questions without answers'
+        @questions_all = Question.all
+        @questions_with_answers = Question.joins(:answers).where(answers: { user_id: current_user.id })
+        @questions_without_answers = @questions_all - @questions_with_answers
+    end
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def show
@@ -50,6 +50,10 @@ class QuestionsController < ApplicationController
         @next_question = @questions[i+1]
         @previous_question = @questions[i-1]
       end
+    end
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 

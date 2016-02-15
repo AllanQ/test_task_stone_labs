@@ -1,0 +1,21 @@
+<ul class="nav nav-pills link-font">
+  <li><%= link_to 'All questions',
+                  questions_path(type_questions: 'All questions'),
+                  remote: true %></li>
+  <li><%= link_to 'Questions with answers',
+                  questions_path(type_questions: 'Questions with answers'),
+                  remote: true %></li>
+  <li class="disabled"><%= link_to 'Questions without answers',
+                                   questions_path(type_questions: 'Questions without answers'),
+                                   remote: true %></li><br /><br /><br />
+</ul>
+<% if !@questions_without_answers || @questions_without_answers == [] %>
+  <div class="segoepr-font">
+    <span>All questions are answered</span>
+  </div><br />
+<% else %>
+  <% @questions = @questions_without_answers %>
+  <%= render'questions/shared_index/categories_turn_over',
+            categories_array: @question_categories, type_questions: @type_questions %><br /><br />
+  <%= render 'questions/shared_index/new_question' %>
+<% end %><br /><br />

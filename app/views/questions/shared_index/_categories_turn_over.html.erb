@@ -4,13 +4,13 @@
       <td class="text-primary"><%= category.name %></td>
       <% if can? :access, :rails_admin %>
         <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question_category', id: category.id),
-                        class: 'btn btn-mini btn-warning' %></td>
+                        class: 'btn btn-mini btn-warning', remote: true %></td>
       <% end %>
       <% if can? :destroy, category %>
         <td><%= link_to 'Destroy', question_category_path(category),
                       method: :delete,
                       data: { confirm: 'Are you sure?' },
-                      class: 'btn btn-mini btn-danger' %></td>
+                      class: 'btn btn-mini btn-danger', remote: true %></td>
       <% end %>
     </li>
     <%= render'questions/shared_index/category_or_questions', category: category, type_questions: type_questions %>

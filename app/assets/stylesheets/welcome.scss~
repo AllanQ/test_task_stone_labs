@@ -1,0 +1,36 @@
+//WELCOME
+.carousel-caption {
+  font-family: PFSquareSansPro-ExtraBlackItalic;
+  color: #66CC66; //66CC33;
+  text-shadow: 2px 2px #000;
+}
+.about {
+  margin-top: 175px;
+  font-family: segoepr;
+  font-size: 35px;
+  margin-bottom: 180px;
+}
+.liana-font{
+  font-family: Liana;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+.tab2 {
+  padding: 29px;
+}
+
+//CAROUSEL
+.carousel {
+  height: 800px;
+}
+.carousel .item {
+  height: 800px;
+}
+.carousel-inner > .item > img {
+  height: 800px;
+  margin: 0 auto;
+  //min-width: 100%;
+}
+.carousel-notice {
+  margin-bottom: 480px;
+}

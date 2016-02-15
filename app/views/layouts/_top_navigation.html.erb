@@ -25,14 +25,16 @@
             <% if current_user && current_user.activated == true %>
               <% if current_page?(controller: '/questions') %>
                 <li class="active">
-                  <%= link_to '', questions_path, class: 'glyphicon glyphicon-list' %>
+                  <%= link_to '', questions_path(type_questions: 'All questions'),
+                                  class: 'glyphicon glyphicon-list' %>
                 </li>
                 <li>
                   <%= link_to '', edit_user_registration_path, class: 'glyphicon glyphicon-cog' %>
                 </li>
               <% else %>
                 <li>
-                  <%= link_to '', questions_path, class: 'glyphicon glyphicon-list' %></li>
+                  <%= link_to '', questions_path(type_questions: 'All questions'),
+                                  class: 'glyphicon glyphicon-list' %></li>
                 </li>
                 <% if current_page?(controller: 'users/registrations', action: 'edit') %>
                   <li class="active">
@@ -91,4 +93,3 @@
     </nav>
   </div>
 </div>
-

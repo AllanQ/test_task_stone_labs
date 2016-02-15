@@ -1,0 +1,49 @@
+<p class="segoepr-font text-primary">
+  <%= @question_category %>
+</p>
+<h2 class="header-font"><%= @question.text %></h2>
+<% if @answer %><br />
+    <%= form_for @answer, url: answer_path(@answer), method: :patch, remote: true do |f| %>
+        <div class="row">
+          <div class="col-md-3">
+            <%= link_to 'Previous', question_path(@previous_question, type_questions: @type_questions),
+                        class: 'btn btn-primary', remote: true if @previous_question %>
+          </div>
+          <div class="field col-md-6">
+            <%= f.text_area :text, rows: 10, class: 'text-area' %><br />
+          </div><br /><br />
+          <div class="col-md-3">
+            <%= link_to 'Next', question_path(@next_question, type_questions: @type_questions),
+                        class: 'btn btn-success', remote: true if @next_question %>
+          </div>
+        </div> <br /><br /><br />
+        <div>
+          <%= f.submit 'Rewrite the answer', class: 'btn btn-warning' %>
+        </div>
+    <% end %><br />
+    <div>
+      <%= link_to 'Destroy', answer_path(@answer),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+    </div>
+<% else %><br />
+    <%= form_for :answer, url: answers_path, remote: true do |f| %>
+        <div class="row">
+          <div class="col-md-3">
+            <%= link_to 'Previous', question_path(@previous_question, type_questions: @type_questions),
+                        class: 'btn btn-primary', remote: true if @previous_question %>
+          </div>
+          <div class="field col-md-6">
+            <%= f.text_area :text, rows: 10, class: 'text-area' %>
+            <%= f.hidden_field :question_id, value: @question.id %>
+          </div><br /><br />
+          <div class="col-md-3">
+            <%= link_to 'Next', question_path(@next_question, type_questions: @type_questions),
+                        class: 'btn btn-success', remote: true if @next_question %>
+          </div>
+        </div> <br /><br /><br />
+        <div>
+          <%= f.submit 'Save the answer', class: 'btn btn-success' %>
+        </div>
+    <% end %>
+<% end %><br /><br />

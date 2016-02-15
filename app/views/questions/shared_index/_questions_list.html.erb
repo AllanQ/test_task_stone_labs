@@ -1,0 +1,8 @@
+<% case @type_questions %>
+ <% when 'All questions' %>
+   <%= render 'questions/shared_index/all' %>
+ <% when 'Questions with answers' %>
+   <%= render 'questions/shared_index/with_answers' %>
+ <% when 'Questions without answers' %>
+   <%= render 'questions/shared_index/without_answers' %>
+<% end %>
