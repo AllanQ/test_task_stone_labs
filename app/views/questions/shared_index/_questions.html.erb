@@ -21,7 +21,9 @@
         <% if can? :destroy, question %>
           <td><%= link_to 'Destroy', question_path(question),
                       method: :delete,
-                      data: { confirm: 'Are you sure?' }, class: 'btn btn-mini btn-danger' %></td>
+                      data: { confirm: 'Are you sure?' },
+                      class: 'btn btn-mini btn-danger' %></td>
+                    <!--remote: true-->
         <% end %>
       </li>
     <% end %>

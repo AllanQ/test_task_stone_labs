@@ -60,6 +60,10 @@ class QuestionsController < ApplicationController
   def destroy
     @question.destroy
     redirect_to questions_path
+    # respond_to do |format|
+    #   format.html
+    #   format.js
+    # end
   end
 
   private
