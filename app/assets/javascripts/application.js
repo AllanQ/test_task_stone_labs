@@ -14,3 +14,7 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require_tree .
+
+//$(document).on("ajax:succes", "li", function(data){
+//    $(data.id).remove();
+//});

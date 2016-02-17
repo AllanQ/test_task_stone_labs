@@ -1,7 +1,7 @@
 <ul class="segoepr-font">
   <% @questions.each do |question| %>
     <% if question.question_category_id == category.id %>
-      <li>
+      <li id=<% question.id %>>
         <td>
           <% answer = Answer.find_by(question_id: question.id, user_id: current_user.id)  %>
           <% if answer %>
@@ -22,8 +22,9 @@
           <td><%= link_to 'Destroy', question_path(question),
                       method: :delete,
                       data: { confirm: 'Are you sure?' },
-                      class: 'btn btn-mini btn-danger' %></td>
-                    <!--remote: true-->
+                      class: 'btn btn-mini btn-danger',
+                      #id: question.id,
+                      remote: true  %></td>
         <% end %>
       </li>
     <% end %>
