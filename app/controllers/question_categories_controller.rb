@@ -4,6 +4,9 @@ class QuestionCategoriesController < ApplicationController
 
   def destroy
     @question_category.destroy
-    redirect_to questions_path
+    respond_to do |format|
+      format.html { redirect_to questions_path }
+      format.js
+    end
   end
 end

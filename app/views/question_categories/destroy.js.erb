@@ -1,0 +1,8 @@
+var element = document.getElementById("<%= @question_category.id %>");
+$ ("#<%= @question_category.id %>").hide(500);
+setTimeout(continueExecution, 500);
+
+function continueExecution()
+{
+element.remove();
+}

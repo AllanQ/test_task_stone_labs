@@ -59,8 +59,6 @@ class QuestionsController < ApplicationController
 
   def destroy
     @question.destroy
-    # return redirect_to questions_path, format: :js
-    return redirect_to questions_path, format: :js, method: :get
     respond_to do |format|
       format.html { redirect_to questions_path }
       format.js

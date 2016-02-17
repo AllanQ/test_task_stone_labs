@@ -1,2 +1,8 @@
-var element = document.getElementById("<%= j @question.id %>");
-element.parentNode.parentNode.remove();
+var element = document.getElementById("<%= @question.id %>");
+$ ("#<%= @question.id %>").hide(600);
+setTimeout(continueExecution, 600);
+
+function continueExecution()
+{
+element.remove();
+}
