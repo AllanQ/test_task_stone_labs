@@ -1,0 +1,5 @@
+class AddUniquenessOfUserIdAndQuestionIdOfAnswersTable < ActiveRecord::Migration
+  def change
+    add_index :answers, [:user_id, :question_id], unique: true
+  end
+end

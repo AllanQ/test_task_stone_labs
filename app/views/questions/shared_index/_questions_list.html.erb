@@ -1,9 +1,9 @@
 <h2 class="header-font"><%= @type_questions %></h2><br />
 <% case @type_questions %>
  <% when 'All questions' %>
-   <%= render 'questions/shared_index/all' %>
+   <%= render 'questions/shared_index/type_questions_menu/all' %>
  <% when 'Questions with answers' %>
-   <%= render 'questions/shared_index/with_answers' %>
+   <%= render 'questions/shared_index/type_questions_menu/with_answers' %>
  <% when 'Questions without answers' %>
-   <%= render 'questions/shared_index/without_answers' %>
+   <%= render 'questions/shared_index/type_questions_menu/without_answers' %>
 <% end %>

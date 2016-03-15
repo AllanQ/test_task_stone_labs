@@ -6,21 +6,19 @@ class AnswersController < ApplicationController
     @question = Question.find(answer_params[:question_id])
     @answer.user_id = current_user.id
     if @answer.save
-      flash[:success] = "Answer saved!"
-      redirect_to questions_path
+      redirect_to questions_path#, alert: "Answer saved!"
     else
-      flash[:alert] = "Answer NOT saved!"
-      @question = Question.find(params[:question_id])
+      # flash[:alert] = "Answer NOT saved!"
+      @question = Question.find(answer_params[:question_id])
       render 'questions/show'
     end
   end
 
   def update
     if @answer.update_attributes(answer_params)
-      flash[:success] = "Answer saved!"
-      redirect_to questions_path
+      redirect_to questions_path, status: 303#, alert: "Answer chanched!"
     else
-      flash[:alert] = "Answer NOT saved!"
+      # flash[:alert] = "Answer NOT saved!"
       @question = Question.find(@answer.question_id)
       render 'questions/show'
     end
@@ -28,7 +26,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to questions_path
+    redirect_to questions_path, status: 303#, alert: "Answer deleted!"
   end
 
   private

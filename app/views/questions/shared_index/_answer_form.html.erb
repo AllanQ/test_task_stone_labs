@@ -1,0 +1,18 @@
+<span class="answer-form hidden"
+      data-questionid = <%= "#{question_id}" %>
+      data-answerid = <%= answer ? answer.id : 0 %>
+      data-answertextold = <%= answer ? answer.text : '' %>>
+
+  <!--<input type="hidden" name="questionid"/>-->
+  <!--<input type="hidden" name="answerid"/>-->
+
+  <% if answer %>
+    <%= form_for answer, url: answer_path(answer), method: :patch, remote: true do |f| %>
+      <%= render 'questions/shared_show/text_area', f: f, question_id: question_id %>
+    <% end %>
+  <% else %>
+    <%= form_for :answer, url: answers_path, remote: true do |f| %>
+      <%= render 'questions/shared_show/text_area', f: f, question_id: question_id %>
+    <% end %>
+  <% end %>
+</span>
