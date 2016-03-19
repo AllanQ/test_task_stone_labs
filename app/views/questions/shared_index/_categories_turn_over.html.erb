@@ -1,4 +1,4 @@
-<ul class="segoepr-font text-left">
+<ul class="segoepr-font text-left" id="list">
   <% categories_array.each do |category| %>
     <% category_id = category.id %>
     <li class="text-primary", id="<%= category_id %>">
@@ -9,15 +9,15 @@
       <% end %>
       <% if can? :destroy, category %>
         <td><%= link_to 'Destroy', question_category_path(category),
-                      method: :delete,
-                      data: { confirm: 'Are you sure?' },
-                      class: 'btn btn-mini btn-danger',
-                      remote: true %></td>
+                        method: :delete,
+                        data: { confirm: 'Are you sure?' },
+                        class: 'btn btn-mini btn-danger',
+                        remote: true %></td>
       <% end %>
       <%= render'questions/shared_index/questions', category_id: category_id, type_questions: type_questions %>
       <% categories_array = QuestionCategory.where(question_category_id: category_id) %>
       <%= render'questions/shared_index/categories_turn_over', categories_array: categories_array,
-                                                               type_questions: type_questions %>
+                  type_questions: type_questions %>
     </li>
   <% end %>
 </ul>

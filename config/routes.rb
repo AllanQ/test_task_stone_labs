@@ -7,8 +7,7 @@ Rails.application.routes.draw do
                                     passwords:  "users/passwords" }
   get 'questions/:id(:integer)',   to: 'questions#show'
   resources :question_categories, only: :destroy
-  resources :questions, only: [:index, :destroy] #do
-  #   get 'answer_form', to: 'questions#answer_form'
-  # end
-  resources :answers,             only: [:create, :update, :destroy]
+  resources :questions, only: [:index, :destroy]
+  resources :answers,   only: [:create, :update, :destroy]
+  get 'answers', to: 'answers#form'
 end

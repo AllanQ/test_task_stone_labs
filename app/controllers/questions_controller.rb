@@ -31,6 +31,11 @@ class QuestionsController < ApplicationController
     categories_array = QuestionCategory.main
     @questions_all = Question.all
     @questions = []
+
+
+    question = @questions_all.first
+
+
     case @type_questions
       when 'All questions'
         questions(categories_array){ question.question_category_id == category.id }

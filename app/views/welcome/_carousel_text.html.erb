@@ -16,10 +16,8 @@
     <% end %>
     <% if can? :index, Question %>
       <td><span class="tab2 menu-animation"><%= link_to 'Questions', questions_path(type_questions: 'All questions'),
-                                         class: 'red quiver' %></span></td>
+                                         class: 'red', id: 'quiver' %></span></td>
     <% end %>
-    <div id="flashes"></div>
-
     <% if current_user.activated == true %>
       <td><span class="tab2 menu-animation"><%= link_to 'Edit profile', edit_user_registration_path %></span></td>
     <% end %>

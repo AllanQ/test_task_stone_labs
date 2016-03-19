@@ -2,13 +2,21 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
+  def form
+    @question_id = answer_params[:question_id]
+    @answer = Answer.where(user_id: current_user.id).find_by(question_id: @question_id)
+    respond_to do |format|
+      format.html { render :layout => false }
+      # format.js
+    end
+  end
+
   def create
     @question = Question.find(answer_params[:question_id])
     @answer.user_id = current_user.id
     if @answer.save
-      redirect_to questions_path#, alert: "Answer saved!"
+      redirect_to questions_path
     else
-      # flash[:alert] = "Answer NOT saved!"
       @question = Question.find(answer_params[:question_id])
       render 'questions/show'
     end
@@ -16,9 +24,8 @@ class AnswersController < ApplicationController
 
   def update
     if @answer.update_attributes(answer_params)
-      redirect_to questions_path, status: 303#, alert: "Answer chanched!"
+      redirect_to questions_path, status: 303
     else
-      # flash[:alert] = "Answer NOT saved!"
       @question = Question.find(@answer.question_id)
       render 'questions/show'
     end
@@ -26,7 +33,7 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to questions_path, status: 303#, alert: "Answer deleted!"
+    redirect_to questions_path, status: 303
   end
 
   private

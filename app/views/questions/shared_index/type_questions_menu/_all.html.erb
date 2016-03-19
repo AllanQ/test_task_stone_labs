@@ -19,8 +19,7 @@
         <%= render 'questions/shared_index/type_questions_menu/link', type_questions: 'Questions without answers' %>
       </li><br /><br /><br />
     </ul>
-    <%= render'questions/shared_index/categories_turn_over',
-               categories_array: @question_categories, type_questions: @type_questions %><br />
+    <%= render 'questions/shared_index/type_questions_menu/list_and_form' %>
   <% end %><br />
   <%= render 'questions/shared_index/new_question' %>
 <% end %><br /><br />
