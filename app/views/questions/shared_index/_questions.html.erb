@@ -28,8 +28,8 @@
         <% end %>
         <span class="answer-form-data"
               data-questionid = <%= "#{question_id}" %>
-              data-answerid = <%= answer ? answer.id : 0 %>
               data-answertextold = <%= answer ? answer.text : '' %>>
+          <span class="answerid"><input type="hidden" value="<%= answer ? answer.id : 0 %>" /></span>
         </span>
       </li>
     <% end %>
