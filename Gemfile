@@ -15,6 +15,7 @@ gem 'uglifier', '2.7.2'
 
 group :development, :test do
   gem 'byebug', '8.2.1'
+  gem 'pry'
 end
 
 group :development do

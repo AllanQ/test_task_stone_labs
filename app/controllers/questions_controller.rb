@@ -38,12 +38,12 @@ class QuestionsController < ApplicationController
 
     case @type_questions
       when 'All questions'
-        questions(categories_array){ question.question_category_id == category.id }
+        questions(categories_array){ |question, category| question.question_category_id == category.id }
       when 'Questions with answers'
-        questions(categories_array){ (question.question_category_id == category.id &&
+        questions(categories_array){ |question, category| (question.question_category_id == category.id &&
                                       Answer.find_by(question_id: question.id, user_id: current_user.id)) }
       when 'Questions without answers'
-        questions(categories_array){ (question.question_category_id == category.id &&
+        questions(categories_array){ |question, category| (question.question_category_id == category.id &&
                                      !Answer.find_by(question_id: question.id, user_id: current_user.id)) }
     end
     i = @questions.index(@question)
@@ -87,10 +87,11 @@ class QuestionsController < ApplicationController
     name
   end
 
-  def questions(categories_array)
+  def questions(categories_array, &block)
     categories_array.each do |category|
       @questions_all.each do |question|
-        if yield
+
+        if block(question, category)
           @questions << question
         end
       end

@@ -10,5 +10,5 @@ Rails.application.routes.draw do
   resources :questions, only: [:index, :destroy]
   resources :answers,   only: [:create, :update, :destroy]
   get 'answers', to: 'answers#form'
-  get 'answers/answerid', to: 'answers#answerid'
+  # get 'answers/answerid', to: 'answers#answerid'
 end

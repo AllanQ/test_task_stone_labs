@@ -5,6 +5,7 @@ form_send_and_remove = ->
   if (form.length>0)
     console.log('form_start_sending')
     data = question.find('.answer-form-data')
+#    console.log(data)
     inputanswerid = question.find('.answerid').find('input')
     questionid = data.data('questionid')
     answerid = inputanswerid.val()
@@ -56,13 +57,13 @@ form_send_and_remove = ->
             error: ->
               console.log('Ответ НЕ был изменён')
           })
-    form.remove()
-    console.log('form_remove')
+#    form.remove()
+#    console.log('form_remove')
 
 form_remove_appear_and_move = (question)->
   form = $('#form').find('.answer-form')
-  form.remove()
-  console.log('form_remove')
+#  form.remove()
+#  console.log('form_remove')
   $(question).addClass('active-question')
   data = $(question).find('.answer-form-data')
   questionid = data.data('questionid')
@@ -81,14 +82,16 @@ form_remove_appear_and_move = (question)->
     #      ,
     #      complete: ->
     #
-    }).done (html) ->
-     $("#form").append html
+    })#.done (html) ->
+     #$("#form").append html
     console.log('form_appear')
   else
     $.ajax("/answers/", {
       type: 'GET',
       data: { 'answer': {'question_id': questionid } }
-    })
+    })#.done (html) ->
+      #$("#form").html html
+      #console.log('Update existing form')
     console.log('form_fill')
   questionoffset = $(question).offset()
   formoffset = $("#form").offset()
