@@ -4,15 +4,17 @@
 <h2 class="header-font"><%= @question.text %></h2><br />
 <% question_id = @question.id %>
 <div class="row">
-  <% if @answer %>
+  <div class="col-md-1 col-md-offset-2"><br /><br /><br /><br />
     <%= render 'questions/shared_show/buttons/button_previous' %>
-    <%= render 'questions/shared_show/form_with_answer', question_id: question_id %>
+  </div>
+  <div class="field col-md-6">
+    <% if @answer %>
+      <%= render 'questions/shared_show/form_with_answer', question_id: question_id %>
+    <% else %>
+      <%= render 'questions/shared_show/form_without_answer', question_id: question_id %>
+    <% end %>
+  </div><br />
+  <div class="col-md-1"><br /><br /><br />
     <%= render 'questions/shared_show/buttons/button_next' %>
-    <%= render 'questions/shared_show/button_destroy_answer' %>
-  <% else %>
-    <%= render 'questions/shared_show/buttons/button_previous' %>
-    <%= render 'questions/shared_show/form_without_answer', question_id: question_id %>
-    <%= render 'questions/shared_show/buttons/button_next' %>
-    <br /><br />
-  <% end %>
+  </div><br />
 </div><br /><br />

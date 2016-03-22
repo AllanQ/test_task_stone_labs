@@ -1,8 +1,5 @@
-<div class="field col-md-6">
-  <%= form_for @answer, url: answer_path(@answer), method: :patch, remote: true do |f| %>
-    <%= render 'questions/shared_show/text_area', f: f, question_id: question_id %>
-    <div>
-      <%= f.submit 'Rewrite the answer', class: 'btn btn-warning' %>
-    </div>
-  <% end %>
-</div><br /><br />
+<%= form_for @answer, url: answer_path(@answer), method: :patch, remote: true do |f| %>
+  <%= render 'questions/shared_show/text_area', f: f, question_id: question_id %><br />
+<% end %><br />
+<%= render 'questions/shared_show/buttons/button_destroy_answer' %>
+<span id="data" data-answerid="<%= @answer.id %>" data-answeroldtext="<%= @answer.text %>"></span>

@@ -1,110 +1,39 @@
-form_send_and_remove = ->
-  question = $('#list').find('.question.active-question')
-  question.removeClass('active-question')
-  form = $('#form').find('.answer-form')
-  if (form.length>0)
-    console.log('form_start_sending')
-    data = question.find('.answer-form-data')
-#    console.log(data)
-    inputanswerid = question.find('.answerid').find('input')
-    questionid = data.data('questionid')
-    answerid = inputanswerid.val()
-    answertextold = data.data('answertextold')
-    answertextnew = form.find('.text-area').val()
-    console.log("questionid = #{questionid}")
-    console.log("answerid = #{answerid}")
-    console.log("answertextold = #{answertextold}")
-    console.log("answertextnew = #{answertextnew}")
-    if answerid == '0'
-      if answertextnew != ''
-        $.ajax('/answers',{
+form_send = ->
+  $('#next,#previous,#back').on('click', ->
+    console.log('batton')
+    text = $('#answer_text').val()
+    answer_id = $('#data').data('answerid')
+    question_id = $('#answer_question_id').val()
+    console.log("text = #{text}")
+    console.log("answer_id = #{answer_id}")
+    console.log("question_id = #{question_id}")
+    if answer_id == 0
+      if text != ''
+        console.log('post')
+        $.ajax('/answers', {
           type: 'POST',
-          data: { 'answer': {'text': answertextnew, 'question_id': questionid } },
-          success: ->
-            console.log('Ответ сохранён')
-            question.find('a').removeClass('text-warning').addClass('text-success')
-            data.data('answertextold', answertextnew)
-            $.ajax('answers/answerid', {
-              type:'GET',
-              data: { 'answer': {'text': answertextnew, 'question_id': questionid } }
-            })
-          ,
-          error: ->
-            console.log('Ответ НЕ был сохранён')
+          data: { 'answer': {'text': text, 'question_id': question_id} }
         })
     else
-      if answertextold != answertextnew
-        if answertextnew == ''
-          $.ajax("/answers/#{answerid}",{
-            type: 'DELETE',
-            success: ->
-              console.log('Ответ был удален')
-              question.find('a').removeClass('text-success').addClass('text-warning')
-              data.data('answertextold', '')
-              inputanswerid.val(0)
-            ,
-            error: ->
-              console.log('Ответ НЕ был удален')
-          })
-        else
-          $.ajax("/answers/#{answerid}",{
+      if text == ''
+        console.log('delete')
+        $.ajax("/answers/#{answer_id}", {
+          type: 'DELETE',
+          data: { 'answer': {'question_id': question_id} }
+        })
+      else
+        text_old = $('#data').data('answeroldtext')
+        if text != text_old
+          console.log("text_old = #{text_old}")
+          console.log("text = #{text}")
+          console.log("text == text_old #{text == text_old}")
+          console.log('put')
+          $.ajax("/answers/#{answer_id}", {
             type: 'PUT',
-            data: { 'answer': {'text': answertextnew, 'question_id': questionid } },
-            success: ->
-              console.log('Ответ изменён')
-              data.data('answertextold', answertextnew)
-            ,
-            error: ->
-              console.log('Ответ НЕ был изменён')
+            data: { 'answer': {'text': text, 'question_id': question_id} }
           })
-#    form.remove()
-#    console.log('form_remove')
-
-form_remove_appear_and_move = (question)->
-  form = $('#form').find('.answer-form')
-#  form.remove()
-#  console.log('form_remove')
-  $(question).addClass('active-question')
-  data = $(question).find('.answer-form-data')
-  questionid = data.data('questionid')
-  form = $('#form').find('.answer-form')
-  if (form.length == 0)
-    $.ajax("/answers/", {
-      type: 'GET',
-      data: { 'answer': {'question_id': questionid } },
-      success: ->
-    #      ,
-    #      error: ->
-    #
-    #      ,
-    #      beforeSend: ->
-    #
-    #      ,
-    #      complete: ->
-    #
-    })#.done (html) ->
-     #$("#form").append html
-    console.log('form_appear')
-  else
-    $.ajax("/answers/", {
-      type: 'GET',
-      data: { 'answer': {'question_id': questionid } }
-    })#.done (html) ->
-      #$("#form").html html
-      #console.log('Update existing form')
-    console.log('form_fill')
-  questionoffset = $(question).offset()
-  formoffset = $("#form").offset()
-  $('#form').offset({top: questionoffset.top, left: formoffset.left})
-  $('#answer_text').focus()
+  )
 
 $(->
-  $('.question').on('mouseenter', ->
-    form_send_and_remove()
-    form_remove_appear_and_move(@)
-  )
-
-  $('.row.feild.questions-and-form-area').on('mouseleave', ->
-    form_send_and_remove()
-  )
+  form_send()
 )

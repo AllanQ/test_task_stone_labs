@@ -5,10 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions",
                                     registrations: "users/registrations",
                                     passwords:  "users/passwords" }
-  get 'questions/:id(:integer)',   to: 'questions#show'
   resources :question_categories, only: :destroy
-  resources :questions, only: [:index, :destroy]
+  resources :questions, only: [:index, :show, :destroy]
   resources :answers,   only: [:create, :update, :destroy]
-  get 'answers', to: 'answers#form'
-  # get 'answers/answerid', to: 'answers#answerid'
 end

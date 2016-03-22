@@ -26,11 +26,6 @@
                           class: 'btn btn-mini btn-danger',
                           remote: true  %></td>
         <% end %>
-        <span class="answer-form-data"
-              data-questionid = <%= "#{question_id}" %>
-              data-answertextold = <%= answer ? answer.text : '' %>>
-          <span class="answerid"><input type="hidden" value="<%= answer ? answer.id : 0 %>" /></span>
-        </span>
       </li>
     <% end %>
   <% end %>
