@@ -1,7 +1,7 @@
 <ul class="segoepr-font text-left">
   <% categories_array.each do |category| %>
     <% category_id = category.id %>
-    <li class="text-primary", id="<%= category_id %>">
+    <li class="text-primary", id="<%= category_id + 10000 %>">
       <td class="text-primary"><%= category.name %></td>
       <% if can? :access, :rails_admin %>
         <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question_category', id: category_id),

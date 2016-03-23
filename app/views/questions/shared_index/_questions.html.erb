@@ -2,7 +2,7 @@
   <% @questions.each do |question| %>
     <% question_id = question.id %>
     <% if question.question_category_id == category_id %>
-      <li class="question">
+      <li class="question", id="<%= question_id %>">
         <td>
           <% answer = Answer.find_by(question_id: question_id, user_id: @user_id) %>
           <% if answer %>
