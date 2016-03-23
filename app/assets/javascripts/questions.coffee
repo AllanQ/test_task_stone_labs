@@ -1,4 +1,4 @@
-form_send = ->
+window.form_send = ->
   $('#next,#previous,#back').on('click', ->
     console.log('batton')
     text = $('#answer_text').val()
