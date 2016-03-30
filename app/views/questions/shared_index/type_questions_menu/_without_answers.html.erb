@@ -1,12 +1,15 @@
 <ul class="nav nav-pills link-font">
   <li>
-    <%= render 'questions/shared_index/type_questions_menu/link', type_questions: 'All questions' %>
+    <%= render 'questions/shared_index/type_questions_menu/link',
+               type_questions: 'All questions' %>
   </li>
   <li>
-    <%= render 'questions/shared_index/type_questions_menu/link', type_questions: 'Questions with answers' %>
+    <%= render 'questions/shared_index/type_questions_menu/link',
+               type_questions: 'Questions with answers' %>
   </li>
   <li class="disabled">
-    <%= render 'questions/shared_index/type_questions_menu/link', type_questions: 'Questions without answers' %>
+    <%= render 'questions/shared_index/type_questions_menu/link',
+               type_questions: 'Questions without answers' %>
   </li><br /><br /><br />
 </ul>
 <% if !@questions_without_answers || @questions_without_answers == [] %>
@@ -15,7 +18,8 @@
 <% else %>
   <% @questions = @questions_without_answers %>
   <%= render'questions/shared_index/categories_turn_over',
-            categories_array: @question_categories, type_questions: @type_questions %>
+            categories_array: @question_categories,
+            type_questions: @type_questions %>
   <br />
   <%= render 'questions/shared_index/new_question' %>
 <% end %><br /><br />

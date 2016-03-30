@@ -4,7 +4,8 @@
     <% if question.question_category_id == category_id %>
       <li class="question", id="<%= question_id %>">
         <td>
-          <% answer = Answer.find_by(question_id: question_id, user_id: @user_id) %>
+          <% answer = Answer.find_by(question_id: question_id,
+                                     user_id: @user_id) %>
           <% if answer %>
             <%= link_to question.text,
                         question_path(question, type_questions: type_questions),
@@ -16,7 +17,8 @@
           <% end %>
         </td>
         <% if can? :access, :rails_admin %>
-          <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question', id: question_id),
+          <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question',
+                                                        id: question_id),
                           class: 'btn btn-mini btn-warning' %></td>
         <% end %>
         <% if can? :destroy, question %>

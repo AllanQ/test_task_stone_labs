@@ -1,6 +1,7 @@
 <h2 class="header-font">Edit <%= current_user.name %> profile</h2>
 
-<%= form_for :user, url: user_registration_path, html: { method: :put } do |f| %>
+<%= form_for :user, url: user_registration_path,
+             html: { method: :put } do |f| %>
   <%= devise_error_messages! %>
 
   <div class="field">
@@ -14,7 +15,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :password %> <br /><i>(leave blank if you don't want to change it)</i><br />
+    <%= f.label :password %> <br />
+    <i>(leave blank if you don't want to change it)</i><br />
     <%= f.password_field :password, autocomplete: 'off' %>
   </div>
 
@@ -24,7 +26,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+    <%= f.label :current_password %>
+    <i>(we need your current password to confirm your changes)</i><br />
     <%= f.password_field :current_password, autocomplete: 'off' %>
   </div><br />
 
@@ -34,7 +37,9 @@
 <% end %><br />
 
 <div class="actions">
-  <%= button_to 'Cancel my account', user_registration_path, data: { confirm: 'Are you sure?' }, method: :delete, class: 'btn btn-danger' %>
+  <%= button_to 'Cancel my account', user_registration_path,
+                data: { confirm: 'Are you sure?' },
+                method: :delete, class: 'btn btn-danger' %>
 </div><br /><br />
 
 <div class="segoepr-font">

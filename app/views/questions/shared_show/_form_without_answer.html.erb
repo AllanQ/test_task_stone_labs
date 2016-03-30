@@ -1,5 +1,6 @@
 <%= form_for :answer, url: answers_path, remote: true do |f| %>
-  <%= render 'questions/shared_show/text_area', f: f, question_id: question_id %><br />
+  <%= render 'questions/shared_show/text_area',
+             f: f, question_id: question_id %><br />
 <% end %><br />
 <br />
 <span id="data" data-answerid="0" data-answeroldtext=""></span>

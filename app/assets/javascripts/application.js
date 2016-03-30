@@ -13,4 +13,6 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require jquery_ujs
+//= require jquery.lettering-0.6.1.min.js
+//= require jquery.textillate.js
 //= require_tree .

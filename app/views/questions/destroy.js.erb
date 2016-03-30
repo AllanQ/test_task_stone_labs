@@ -1,8 +1,6 @@
 var element = document.getElementById("<%= @question.id %>");
-$ ("#<%= @question.id %>").hide(500);
+$("#<%= @question.id %>").hide(500);
 setTimeout(continueExecution, 500);
-
-function continueExecution()
-{
+function continueExecution(){
   element.remove();
 }

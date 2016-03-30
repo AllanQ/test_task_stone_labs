@@ -4,7 +4,9 @@
     <li class="text-primary", id="<%= category_id + 10000 %>">
       <td class="text-primary"><%= category.name %></td>
       <% if can? :access, :rails_admin %>
-        <td><%= link_to 'Edit', rails_admin.edit_path(model_name: 'question_category', id: category_id),
+        <td><%= link_to 'Edit',
+                        rails_admin.edit_path(model_name: 'question_category',
+                                              id: category_id),
                         class: 'btn btn-mini btn-warning' %></td>
       <% end %>
       <% if can? :destroy, category %>
@@ -14,9 +16,12 @@
                         class: 'btn btn-mini btn-danger',
                         remote: true %></td>
       <% end %>
-      <%= render'questions/shared_index/questions', category_id: category_id, type_questions: type_questions %>
-      <% categories_array = QuestionCategory.where(question_category_id: category_id) %>
-      <%= render'questions/shared_index/categories_turn_over', categories_array: categories_array,
+      <%= render'questions/shared_index/questions', category_id: category_id,
+                type_questions: type_questions %>
+      <% categories_array = QuestionCategory
+          .where(question_category_id: category_id) %>
+      <%= render'questions/shared_index/categories_turn_over',
+                categories_array: categories_array,
                   type_questions: type_questions %>
     </li>
   <% end %>

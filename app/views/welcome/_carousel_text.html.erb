@@ -12,22 +12,41 @@
   </h2><br />
   <h3>
     <% if can? :access, :rails_admin %>
-      <td><span class="tab2 menu-animation"><%= link_to 'Administration', rails_admin_path %></span></td>
+      <td>
+        <span class="tab2 menu-animation">
+          <%= link_to 'Administration', rails_admin_path %>
+        </span>
+      </td>
     <% end %>
     <% if can? :index, Question %>
-      <td><span class="tab2 menu-animation"><%= link_to 'Questions', questions_path(type_questions: 'All questions'),
-                                         class: 'red', id: 'quiver' %></span></td>
+      <td>
+        <span class="tab2 menu-animation">
+          <%= link_to 'Questions',
+                      questions_path(type_questions: 'All questions'),
+                      class: 'red', id: 'jumping' %>
+        </span>
+      </td>
     <% end %>
     <% if current_user.activated == true %>
-      <td><span class="tab2 menu-animation"><%= link_to 'Edit profile', edit_user_registration_path %></span></td>
+      <td>
+        <span class="tab2 menu-animation">
+          <%= link_to 'Edit profile', edit_user_registration_path %>
+        </span>
+      </td>
     <% end %>
-      <td><span class="tab2 menu-animation"><%= link_to 'LOG OUT', destroy_user_session_path,
-                                         method: :delete  %></span></td>
+      <td>
+        <span class="tab2 menu-animation">
+          <%= link_to 'LOG OUT', destroy_user_session_path,
+                                 method: :delete  %>
+        </span>
+      </td>
   </h3>
 <% else %>
   <h2>Hello, Guest!</h2><br />
   <h3>
-    To get access - <%= link_to 'LOG IN', new_user_session_path %>, if you have an account,
-    or <%= link_to 'SIGN UP', new_user_registration_path %> - if you haven't.<br />
+    To get access -
+    <%= link_to 'LOG IN', new_user_session_path %>, if you have an account,
+    or <%= link_to 'SIGN UP', new_user_registration_path %>
+    - if you haven't.<br />
   </h3>
 <% end %>
