@@ -10,12 +10,15 @@ menu_item_jumping = ->
     },
   })
 
-menu_animation =->
+menu_animation =(font_inrease = 40)->
+  menu_font_size = $('.tab2.menu-animation:last').css('fontSize')
+  actiovated_fond_size = (parseInt(menu_font_size) + 40) + 'px'
+  non_actiovated_fond_size = menu_font_size
   $('.tab2.menu-animation').on('mouseenter', ->
-    $(this).animate({'fontSize':'+=40'}, 170)
+    $(this).animate({'fontSize':"#{actiovated_fond_size}"}, 170)
   )
   $('.tab2.menu-animation').on('mouseleave', ->
-    $(this).animate({'fontSize':'-=40'}, 170)
+    $(this).animate({'fontSize':"#{non_actiovated_fond_size}"}, 170)
   )
 
 $(->
