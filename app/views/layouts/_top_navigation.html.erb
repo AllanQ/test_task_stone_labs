@@ -93,11 +93,11 @@
             <%= form_for :user, url: user_session_path,
                          class: 'form-inline top-padding' do |f| %>
               <div class="log-in pull-right">
-                <%= f.email_field :email, autofocus: true,
-                                  placeholder: 'E-mail', class: 'input-small' %>
+                <%= f.email_field :email, placeholder: 'E-mail',
+                                          class: 'input-small' %>
                 <%= f.password_field :password, autocomplete: "off",
-                                     placeholder: 'Password',
-                                     class: 'input-small' %>
+                                                placeholder: 'Password',
+                                                class: 'input-small' %>
                 <%= f.submit 'LOG IN', class: 'btn btn-success' %>
                 <%= link_to 'SIGN UP', new_user_registration_path,
                             class: 'btn btn-primary' %>
