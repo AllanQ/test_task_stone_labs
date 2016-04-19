@@ -40,30 +40,20 @@ class QuestionsController < ApplicationController
     @questions = []
     case @type_questions
       when 'All questions'
-        # proc = proc { |question, category|
-        #               question.question_category_id == category.id }
         questions(categories_array) { |question, category|
           question.question_category_id == category.id
-        } #, proc)
+        }
       when 'Questions with answers'
-        # proc = proc { |question, category|
-        #               (question.question_category_id == category.id &&
-        #               Answer.find_by(question_id: question.id,
-        #                              user_id: current_user.id)) }
         questions(categories_array) { |question, category|
           (question.question_category_id == category.id &&
             Answer.find_by(question_id: question.id, user_id: current_user.id))
-        } #, proc)
+        }
       when 'Questions without answers'
-        # proc = proc { |question, category|
-        #               (question.question_category_id == category.id &&
-        #               !Answer.find_by(question_id: question.id,
-        #                               user_id: current_user.id)) }
         questions(categories_array){ |question, category|
           (question.question_category_id == category.id &&
             !Answer.find_by(question_id: question.id,
             user_id: current_user.id))
-        }  #, proc)
+        }
     end
     i = @questions.index(@question)
     if i == @questions.length - 1
@@ -106,18 +96,16 @@ class QuestionsController < ApplicationController
     name
   end
 
-  def questions(categories_array) #, proc)
+  def questions(categories_array)
     categories_array.each do |category|
       @questions_all.each do |question|
-        # condition = proc.call(question, category)
-        # if condition
         if yield
           @questions << question
         end
       end
       categories_array = QuestionCategory
         .where(question_category_id: category.id)
-      questions(categories_array){yield} #, proc)
+      questions(categories_array){yield}
     end
   end
 end
