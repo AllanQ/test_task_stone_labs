@@ -1,28 +1,12 @@
 class QuestionsController < ApplicationController
+  require_relative '../../app/models/question'
+
   before_action :authenticate_user!
   load_and_authorize_resource
 
   def index
-    @type_questions = 'All questions'
-    @type_questions = params[:type_questions] if params[:type_questions]
-
-    @question_categories = QuestionCategory.main
-
+    @type_questions = Question.return_type_questions(params[:type_questions])
     @user_id = current_user.id
-
-
-    case @type_questions
-      when 'All questions'
-        @questions_all = Question.all
-      when 'Questions with answers'
-        @questions_with_answers = Question.joins(:answers)
-          .where(answers: { user_id: @user_id })
-      when 'Questions without answers'
-        @questions_all = Question.all
-        @questions_with_answers = Question.joins(:answers)
-          .where(answers: { user_id: @user_id })
-        @questions_without_answers = @questions_all - @questions_with_answers
-    end
     respond_to do |format|
       format.html
       format.js
