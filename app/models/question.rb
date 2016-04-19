@@ -6,4 +6,12 @@ class Question < ActiveRecord::Base
   validates_associated :answers
   validates :question_category_id, :text, presence: true
   validates :text, uniqueness: true, length: { minimum: 3 }
+
+
+
+
+
+
+
+
 end
