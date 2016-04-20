@@ -7,12 +7,12 @@ class Question < ActiveRecord::Base
   validates :question_category_id, :text, presence: true
   validates :text, uniqueness: true, length: { minimum: 3 }
 
-  def self.return_type_questions(quest_type)
-    quest_type ? quest_type : 'All questions'
+  def self.return_type_questions(type_questions)
+    type_questions ? type_questions : 'All questions'
   end
 
-  def self.array_questions(quest_type, user_id)
-    case quest_type
+  def self.array_questions(type_questions, user_id)
+    case type_questions
     when 'All questions'
       Question.all
     when 'Questions with answers'
@@ -25,11 +25,121 @@ class Question < ActiveRecord::Base
   def self.without_answers(user_id)
     sql = <<-SQL
       SELECT questions.* FROM questions
-      WHERE NOT EXISTS
+        WHERE NOT EXISTS
         (SELECT id FROM answers WHERE answers.user_id = #{user_id} AND
         answers.question_id = questions.id);
     SQL
     find_by_sql(sql)
+  end
+
+  def self.next_and_previous(current_question, type_questions, user_id, which)
+    main_categories_array = QuestionCategory.main
+    array_questions = define_questions_array(type_questions,
+                                             main_categories_array, user_id)
+    case which
+    when 'previous'
+      nearest(current_question, array_questions)[0]
+    when 'next'
+      nearest(current_question, array_questions)[1]
+    else
+      raise("Error in button-link to next or previous question.\
+ which = #{which}")
+    end
+  end
+
+  private
+
+  # def self.define_questions_array(type_questions, main_categories_array,
+  #                                 user_id)
+  #   case type_questions
+  #   when 'All questions'
+  #     sort_questions(main_categories_array) { |question, category|
+  #       (question.question_category_id == category.id) if question && category
+  #     }
+  #   when 'Questions with answers'
+  #     sort_questions(main_categories_array) { |question, category|
+  #       (question.question_category_id == category.id &&
+  #         Answer.find_by(question_id: question.id, user_id: user_id))
+  #     }
+  #   when 'Questions without answers'
+  #     sort_questions(main_categories_array){ |question, category|
+  #       (question.question_category_id == category.id &&
+  #         !Answer.find_by(question_id: question.id,
+  #         user_id: user_id))
+  #     }
+  #   end
+  # end
+
+  def self.define_questions_array(type_questions, main_categories_array,
+                                  user_id)
+    case type_questions
+    when 'All questions'
+      proc = proc { |question, category|
+        question.question_category_id == category.id }
+      sort_questions(main_categories_array, proc)
+    when 'Questions with answers'
+      proc = proc { |question, category|
+        (question.question_category_id == category.id &&
+          Answer.find_by(question_id: question.id,
+                         user_id: user_id)) }
+      sort_questions(main_categories_array, proc)
+    when 'Questions without answers'
+      proc = proc { |question, category|
+        (question.question_category_id == category.id &&
+          !Answer.find_by(question_id: question.id,
+                          user_id: user_id)) }
+      sort_questions(main_categories_array, proc)
+    end
+  end
+
+  # def self.sort_questions(main_categories_array)
+  #   array_questions = []
+  #   array_questions_all = Question.all
+  #   main_categories_array.each do |category|
+  #     array_questions_all.each do |question|
+  #       if yield
+  #         array_questions << question
+  #       end
+  #     end
+  #     categories_array = QuestionCategory
+  #       .where(question_category_id: category.id)
+  #     array_questions += sort_questions(categories_array){yield}
+  #   end
+  #   array_questions
+  # end
+
+  def self.sort_questions(main_categories_array, proc)
+    array_questions = []
+    array_questions_all = Question.all
+    main_categories_array.each do |category|
+      array_questions_all.each do |question|
+        condition = proc.call(question, category)
+        if condition
+          array_questions << question
+        end
+      end
+      categories_array = QuestionCategory
+        .where(question_category_id: category.id)
+      array_questions += sort_questions(categories_array, proc)
+    end
+    array_questions
+  end
+
+  def self.nearest(current_question, array_questions)
+    i = array_questions.index(current_question)
+    if i == array_questions.length - 1
+      next_question = nil
+      previous_question = array_questions[i-1]
+    else
+      if i == 0
+        next_question = array_questions[i+1]
+        previous_question = nil
+      else
+        next_question = array_questions[i+1]
+        previous_question = array_questions[i-1]
+      end
+    end
+    [previous_question, next_question]
   end
 
 end

@@ -7,13 +7,15 @@
 <div>
   <% case @type_questions %>
   <% when 'All questions' %>
-    <%= link_to 'Back', questions_path, id: 'back',
-                class: 'btn btn-primary' %>
+    <%= link_to 'Back', questions_path(type_questions: 'All questions'),
+      id: 'back', class: 'btn btn-primary' %>
   <% when 'Questions with answers' %>
-    <%= link_to 'Back', questions_with_answers_path,
-                id: 'back', class: 'btn btn-primary' %>
+    <%= link_to 'Back', questions_path(
+      type_questions: 'Questions with answers'),
+      id: 'back', class: 'btn btn-primary' %>
   <% when 'Questions without answers' %>
-    <%= link_to 'Back', questions_without_answers_path,
-                id: 'back', class: 'btn btn-primary' %>
+    <%= link_to 'Back', questions_path(
+      type_questions: 'Questions without answers'),
+      id: 'back', class: 'btn btn-primary' %>
 <% end %>
 </div>

@@ -1,5 +1,6 @@
 <p class="segoepr-font text-primary">
-  <%= @question_category %>
+  <%= QuestionCategory
+    .return_question_category_full_name(@question.question_category_id) %>
 </p>
 <h2 class="header-font"><%= @question.text %></h2><br />
 <% question_id = @question.id %>
