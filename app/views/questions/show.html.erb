@@ -6,14 +6,14 @@
 </span>
 <div>
   <% case @type_questions %>
-  <% when 'All questions' %>
-    <%= link_to 'Back', questions_path, id: 'back',
-                class: 'btn btn-primary' %>
-  <% when 'Questions with answers' %>
-    <%= link_to 'Back', questions_with_answers_path,
-                id: 'back', class: 'btn btn-primary' %>
-  <% when 'Questions without answers' %>
-    <%= link_to 'Back', questions_without_answers_path,
-                id: 'back', class: 'btn btn-primary' %>
-<% end %>
+    <% when 'All questions' %>
+      <%= link_to 'Back', questions_path, id: 'back',
+                  class: 'btn btn-primary' %>
+    <% when 'Questions with answers' %>
+      <%= link_to 'Back', questions_with_answers_path,
+                  id: 'back', class: 'btn btn-primary' %>
+    <% when 'Questions without answers' %>
+      <%= link_to 'Back', questions_without_answers_path,
+                  id: 'back', class: 'btn btn-primary' %>
+  <% end %>
 </div>

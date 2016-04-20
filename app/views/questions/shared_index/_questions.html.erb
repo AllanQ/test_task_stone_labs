@@ -1,5 +1,5 @@
 <ul class="segoepr-font">
-  <% questions.each do |question| %>
+  <% @questions.each do |question| %>
     <% question_id = question.id %>
     <% if question.question_category_id == category_id %>
       <li class="question", id="<%= question_id %>">

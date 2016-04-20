@@ -8,6 +8,4 @@ class QuestionCategory < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true, length: { minimum: 3 }
 
   scope :main, -> { where(question_category_id: nil) }
-
-
 end

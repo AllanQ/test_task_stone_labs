@@ -1,5 +1,5 @@
 <ul class="segoepr-font text-left">
-  <% question_categories.each do |category| %>
+  <% categories_array.each do |category| %>
     <% category_id = category.id %>
     <li class="text-primary", id="<%= category_id + 10000 %>">
       <td class="text-primary"><%= category.name %></td>
@@ -16,16 +16,13 @@
                         class: 'btn btn-mini btn-danger',
                         remote: true %></td>
       <% end %>
-      <%= render'questions/shared_index/questions',
-        category_id:    category_id,
-        type_questions: type_questions,
-        questions:      questions %>
-      <% question_categories = QuestionCategory
-        .where(question_category_id: category_id) %>
+      <%= render'questions/shared_index/questions', category_id: category_id,
+                type_questions: type_questions %>
+      <% categories_array = QuestionCategory
+          .where(question_category_id: category_id) %>
       <%= render'questions/shared_index/categories_turn_over',
-        type_questions:      type_questions,
-        question_categories: question_categories,
-        questions:           questions %>
+                categories_array: categories_array,
+                  type_questions: type_questions %>
     </li>
   <% end %>
 </ul>
