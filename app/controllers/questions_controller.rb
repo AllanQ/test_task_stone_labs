@@ -1,24 +1,12 @@
 class QuestionsController < ApplicationController
+  require_relative '../../app/models/question'
+
   before_action :authenticate_user!
   load_and_authorize_resource
 
   def index
-    @type_questions = 'All questions'
-    @type_questions = params[:type_questions] if params[:type_questions]
-    @question_categories = QuestionCategory.main
+    @type_questions = Question.return_type_questions(params[:type_questions])
     @user_id = current_user.id
-    case @type_questions
-      when 'All questions'
-        @questions_all = Question.all
-      when 'Questions with answers'
-        @questions_with_answers = Question.joins(:answers)
-          .where(answers: { user_id: @user_id })
-      when 'Questions without answers'
-        @questions_all = Question.all
-        @questions_with_answers = Question.joins(:answers)
-          .where(answers: { user_id: @user_id })
-        @questions_without_answers = @questions_all - @questions_with_answers
-    end
     respond_to do |format|
       format.html
       format.js
@@ -34,22 +22,39 @@ class QuestionsController < ApplicationController
     categories_array = QuestionCategory.main
     @questions_all = Question.all
     @questions = []
+    # case @type_questions
+    # when 'All questions'
+    #   questions(categories_array) { |question, category|
+    #     (question.question_category_id == category.id) if question && category
+    #   }
+    # when 'Questions with answers'
+    #   questions(categories_array) { |question, category|
+    #     (question.question_category_id == category.id &&
+    #       Answer.find_by(question_id: question.id, user_id: current_user.id))
+    #   }
+    # when 'Questions without answers'
+    #   questions(categories_array){ |question, category|
+    #     (question.question_category_id == category.id &&
+    #       !Answer.find_by(question_id: question.id,
+    #       user_id: current_user.id))
+    #   }
+    # end
     case @type_questions
     when 'All questions'
       proc = proc { |question, category|
-                    question.question_category_id == category.id }
+        question.question_category_id == category.id }
       questions(categories_array, proc)
     when 'Questions with answers'
       proc = proc { |question, category|
-                    (question.question_category_id == category.id &&
-                    Answer.find_by(question_id: question.id,
-                                   user_id: current_user.id)) }
+        (question.question_category_id == category.id &&
+          Answer.find_by(question_id: question.id,
+                         user_id: current_user.id)) }
       questions(categories_array, proc)
     when 'Questions without answers'
       proc = proc { |question, category|
-                    (question.question_category_id == category.id &&
-                    !Answer.find_by(question_id: question.id,
-                                    user_id: current_user.id)) }
+        (question.question_category_id == category.id &&
+          !Answer.find_by(question_id: question.id,
+                          user_id: current_user.id)) }
       questions(categories_array, proc)
     end
     i = @questions.index(@question)
@@ -93,6 +98,18 @@ class QuestionsController < ApplicationController
     name
   end
 
+  # def questions(categories_array)
+  #   categories_array.each do |category|
+  #     @questions_all.each do |question|
+  #       if yield
+  #         @questions << question
+  #       end
+  #     end
+  #     categories_array = QuestionCategory
+  #       .where(question_category_id: category.id)
+  #     questions(categories_array){yield}
+  #   end
+  # end
   def questions(categories_array, proc)
     categories_array.each do |category|
       @questions_all.each do |question|

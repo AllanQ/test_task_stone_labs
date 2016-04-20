@@ -12,14 +12,14 @@
                type_questions: 'Questions without answers' %>
   </li><br /><br /><br />
 </ul>
-<% if !@questions_without_answers || @questions_without_answers == [] %>
+<% if !questions || questions == [] %>
   <%= render 'questions/shared_index/type_questions_menu/message',
              message: 'All questions are answered' %>
 <% else %>
-  <% @questions = @questions_without_answers %>
   <%= render'questions/shared_index/categories_turn_over',
-            categories_array: @question_categories,
-            type_questions: @type_questions %>
+    type_questions:      type_questions,
+    question_categories: question_categories,
+    questions:           questions %>
   <br />
   <%= render 'questions/shared_index/new_question' %>
 <% end %><br /><br />
