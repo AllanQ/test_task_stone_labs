@@ -12,32 +12,7 @@ class Question < ActiveRecord::Base
   # #scope :without, -> {  }
   # scope :next, -> (id) { where('id > ?', id).first }
   # scope :previous, -> (id) { where('id < ?', id).last }
-
-
-
-  def self.array_questions(type_questions, user_id)
-    case type_questions
-    when 'All questions'
-      Question.all
-    when 'Questions with answers'
-      Question.joins(:answers).where(answers: { user_id: user_id })
-    when 'Questions without answers'
-      without_answers(user_id)
-    end
-  end
-
-  def self.without_answers(user_id)
-    sql = <<-SQL
-      SELECT questions.* FROM questions
-        WHERE NOT EXISTS
-        (SELECT id FROM answers WHERE answers.user_id = #{user_id} AND
-        answers.question_id = questions.id);
-    SQL
-    find_by_sql(sql)
-  end
-
-
-
+  #
   #
   # def self.next(current_question_id, category_id, type_questions, user_id, which)
   #   case type_questions

@@ -18,14 +18,12 @@
       <% end %>
       <%= render'questions/shared_index/questions',
         category_id:    category_id,
-        type_questions: type_questions,
-        questions:      questions %>
+        type_questions: type_questions %>
       <% question_categories = QuestionCategory
         .where(question_category_id: category_id) %>
       <%= render'questions/shared_index/categories_turn_over',
         type_questions:      type_questions,
-        question_categories: question_categories,
-        questions:           questions %>
+        question_categories: question_categories %>
     </li>
   <% end %>
 </ul>

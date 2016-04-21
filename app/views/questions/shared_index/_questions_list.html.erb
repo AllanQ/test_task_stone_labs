@@ -1,22 +1,18 @@
 <% type_questions = params[:type_questions] ?
   params[:type_questions] : 'All questions' %>
 <% question_categories = QuestionCategory.main %>
-<% questions = Question.array_questions(type_questions, current_user.id) %>
 <h2 class="header-font"><%= type_questions %></h2><br />
 <% case type_questions %>
 <% when 'All questions' %>
  <%= render 'questions/shared_index/type_questions_menu/all',
    type_questions:      type_questions,
-   question_categories: question_categories,
-   questions:           questions %>
+   question_categories: question_categories %>
 <% when 'Questions with answers' %>
  <%= render 'questions/shared_index/type_questions_menu/with_answers',
    type_questions:      type_questions,
-   question_categories: question_categories,
-   questions:           questions %>
+   question_categories: question_categories %>
 <% when 'Questions without answers' %>
  <%= render 'questions/shared_index/type_questions_menu/without_answers',
    type_questions:      type_questions,
-   question_categories: question_categories,
-   questions:           questions %>
+   question_categories: question_categories %>
 <% end %>

@@ -19,8 +19,6 @@ class QuestionCategory < ActiveRecord::Base
 
 
 
-
-
   private
 
   def self.build_category_full_name(category)
