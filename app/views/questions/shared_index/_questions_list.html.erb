@@ -1,6 +1,7 @@
-<% type_questions = @type_questions %>
+<% type_questions = params[:type_questions] ?
+  params[:type_questions] : 'All questions' %>
 <% question_categories = QuestionCategory.main %>
-<% questions = Question.array_questions(type_questions, @user_id) %>
+<% questions = Question.array_questions(type_questions, current_user.id) %>
 <h2 class="header-font"><%= type_questions %></h2><br />
 <% case type_questions %>
 <% when 'All questions' %>

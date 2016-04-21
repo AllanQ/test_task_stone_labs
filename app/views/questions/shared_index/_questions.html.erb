@@ -5,7 +5,7 @@
       <li class="question", id="<%= question_id %>">
         <td>
           <% answer = Answer.find_by(question_id: question_id,
-                                     user_id: @user_id) %>
+                                     user_id: current_user.id) %>
           <% if answer %>
             <%= link_to question.text,
                         question_path(question, type_questions: type_questions),

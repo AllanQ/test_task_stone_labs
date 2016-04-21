@@ -5,8 +5,6 @@ class QuestionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @type_questions = Question.return_type_questions(params[:type_questions])
-    @user_id = current_user.id
     respond_to do |format|
       format.html
       format.js
@@ -14,9 +12,8 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @type_questions = params[:type_questions]
-    @user_id = current_user.id
-    @answer = Answer.find_by(question_id: @question.id, user_id: @user_id)
+    @answer = Answer
+                .find_by(question_id: @question.id, user_id: current_user.id)
     respond_to do |format|
       format.html
       format.js
@@ -30,4 +27,6 @@ class QuestionsController < ApplicationController
       format.js
     end
   end
+
+
 end

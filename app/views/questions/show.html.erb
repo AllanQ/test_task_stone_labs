@@ -1,11 +1,12 @@
+<% type_questions = params[:type_questions] %>
 <p class="header-font">
-  <%= @type_questions %>
+  <%= type_questions %>
 </p>
 <span class="question">
   <%= render 'questions/shared_show/question' %>
 </span>
 <div>
-  <% case @type_questions %>
+  <% case type_questions %>
   <% when 'All questions' %>
     <%= link_to 'Back', questions_path(type_questions: 'All questions'),
       id: 'back', class: 'btn btn-primary' %>

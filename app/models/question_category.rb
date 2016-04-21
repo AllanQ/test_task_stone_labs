@@ -9,6 +9,9 @@ class QuestionCategory < ActiveRecord::Base
 
   scope :main, -> { where(question_category_id: nil) }
 
+  scope :next, -> (id) { where('id > ?', id).first }
+  scope :previous, -> (id) { where('id < ?', id).last }
+
 
   def self.return_question_category_full_name(id)
     build_category_full_name(QuestionCategory.find(id))

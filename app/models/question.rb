@@ -7,9 +7,13 @@ class Question < ActiveRecord::Base
   validates :question_category_id, :text, presence: true
   validates :text, uniqueness: true, length: { minimum: 3 }
 
-  def self.return_type_questions(type_questions)
-    type_questions ? type_questions : 'All questions'
-  end
+  # scope :joins_answers, -> { joins(:answers) }
+  # scope :with_user_answ, -> { where(answers: { user_id: user_id }) }
+  # #scope :without, -> {  }
+  # scope :next, -> (id) { where('id > ?', id).first }
+  # scope :previous, -> (id) { where('id < ?', id).last }
+
+
 
   def self.array_questions(type_questions, user_id)
     case type_questions
@@ -32,6 +36,48 @@ class Question < ActiveRecord::Base
     find_by_sql(sql)
   end
 
+
+
+  #
+  # def self.next(current_question_id, category_id, type_questions, user_id, which)
+  #   case type_questions
+  #   when 'All questions'
+  #     questions_scope = Question.all
+  #     next_question = questions_scope.next(current_question_id)
+  #
+  #     current_question_category_id = Question.find(current_question_id).question_category_id
+  #     next_question_category_id = next_question.question_category_id
+  #     if current_question_category_id == next_question_category_id
+  #       return next_question
+  #     else
+  #       return
+  #         questions_scope
+  #           .where(question_category_id: current_question_category_id)
+  #           .next(current_question_id) ||
+  #           questions_scope
+  #             .where(question_category_id: QuestionCategory.next(current_question_category_id).id).first ||
+  #
+  #     end
+  #
+  #
+  #
+  #
+  #   when 'Questions with answers'
+  #     Question.joins_answers.with_user_answ.next
+  #
+  #   when 'Questions without answers'
+  #     without_answers(user_id).next
+  #
+  #   end
+  #
+  # end
+  #
+  # def self.serach_questions_in_category()
+  #
+  # end
+
+
+
   def self.next_and_previous(current_question, type_questions, user_id, which)
     main_categories_array = QuestionCategory.main
     array_questions = define_questions_array(type_questions,
@@ -48,27 +94,6 @@ class Question < ActiveRecord::Base
   end
 
   private
-
-  # def self.define_questions_array(type_questions, main_categories_array,
-  #                                 user_id)
-  #   case type_questions
-  #   when 'All questions'
-  #     sort_questions(main_categories_array) { |question, category|
-  #       (question.question_category_id == category.id) if question && category
-  #     }
-  #   when 'Questions with answers'
-  #     sort_questions(main_categories_array) { |question, category|
-  #       (question.question_category_id == category.id &&
-  #         Answer.find_by(question_id: question.id, user_id: user_id))
-  #     }
-  #   when 'Questions without answers'
-  #     sort_questions(main_categories_array){ |question, category|
-  #       (question.question_category_id == category.id &&
-  #         !Answer.find_by(question_id: question.id,
-  #         user_id: user_id))
-  #     }
-  #   end
-  # end
 
   def self.define_questions_array(type_questions, main_categories_array,
                                   user_id)
@@ -91,22 +116,6 @@ class Question < ActiveRecord::Base
       sort_questions(main_categories_array, proc)
     end
   end
-
-  # def self.sort_questions(main_categories_array)
-  #   array_questions = []
-  #   array_questions_all = Question.all
-  #   main_categories_array.each do |category|
-  #     array_questions_all.each do |question|
-  #       if yield
-  #         array_questions << question
-  #       end
-  #     end
-  #     categories_array = QuestionCategory
-  #       .where(question_category_id: category.id)
-  #     array_questions += sort_questions(categories_array){yield}
-  #   end
-  #   array_questions
-  # end
 
   def self.sort_questions(main_categories_array, proc)
     array_questions = []
