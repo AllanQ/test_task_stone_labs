@@ -8,11 +8,17 @@
                                      user_id: current_user.id) %>
           <% if answer %>
             <%= link_to question.text,
-                        question_path(question, type_questions: type_questions),
+                        question_path(question,
+                                      type_questions: type_questions,
+                                      previous_question_id: nil,
+                                      next_question_id: nil),
                         class: 'text-success' %>
           <% else %>
             <%= link_to question.text,
-                        question_path(question, type_questions: type_questions),
+                        question_path(question,
+                                      type_questions: type_questions,
+                                      previous_question_id: nil,
+                                      next_question_id: nil),
                         class: 'text-warning' %>
           <% end %>
         </td>
@@ -22,7 +28,7 @@
                           class: 'btn btn-mini btn-warning' %></td>
         <% end %>
         <% if can? :destroy, question %>
-          <td><%= link_to 'Destroy', question_path(question),
+          <td><%= link_to 'Destroy', question_path(question.id),
                           method: :delete,
                           data: { confirm: 'Are you sure?' },
                           class: 'btn btn-mini btn-danger',
