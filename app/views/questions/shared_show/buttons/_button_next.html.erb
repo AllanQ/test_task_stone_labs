@@ -1,8 +1,6 @@
-<% if @next_question %>
-  <%= link_to 'Next', question_path(@next_question,
-                                    type_questions: params[:type_questions],
-                                    previous_question_id: @question.id,
-                                    next_question_id: nil),
+<% if next_question = @question.next_question %>
+  <%= link_to 'Next', question_path(next_question,
+                                    type_questions: params[:type_questions]),
               id: 'next', class: 'btn btn-success',
-              remote: true if @next_question %>
+              remote: true if next_question %>
 <% end %>

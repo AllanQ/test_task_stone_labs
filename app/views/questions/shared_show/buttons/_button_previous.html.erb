@@ -1,8 +1,6 @@
-<% if @previous_question %>
-  <%= link_to 'Previous', question_path(@previous_question,
-                                        type_questions: params[:type_questions],
-                                        previous_question_id: nil,
-                                        next_question_id: @question.id),
+<% if previous_question = @question.previous_question %>
+  <%= link_to 'Previous', question_path(previous_question,
+                                        type_questions: params[:type_questions]),
               id: 'previous', class: 'btn btn-primary',
-              remote: true if @previous_question %>
+              remote: true if previous_question %>
 <% end %>

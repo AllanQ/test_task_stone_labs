@@ -9,16 +9,12 @@
           <% if answer %>
             <%= link_to question.text,
                         question_path(question,
-                                      type_questions: type_questions,
-                                      previous_question_id: nil,
-                                      next_question_id: nil),
+                                      type_questions: type_questions),
                         class: 'text-success' %>
           <% else %>
             <%= link_to question.text,
                         question_path(question,
-                                      type_questions: type_questions,
-                                      previous_question_id: nil,
-                                      next_question_id: nil),
+                                      type_questions: type_questions),
                         class: 'text-warning' %>
           <% end %>
         </td>
