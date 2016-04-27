@@ -4,6 +4,8 @@ class QuestionCategory < ActiveRecord::Base
 
   has_many   :questions, dependent: :destroy
 
+  has_ancestry
+
   validates_associated :questions
   validates :name, presence: true, uniqueness: true, length: { minimum: 3 }
 
@@ -17,12 +19,12 @@ class QuestionCategory < ActiveRecord::Base
 
   def self.build_category_full_name(category)
     name = category.name
-    parent_id = category.question_category_id
-    while parent_id
-      category = QuestionCategory.find(parent_id)
+    parent_category_id = category.question_category_id
+    while parent_category_id
+      category = QuestionCategory.find(parent_category_id)
       parent_name = category.name
       name = "#{parent_name}->#{name}"
-      parent_id = category.question_category_id
+      parent_category_id = category.question_category_id
     end
     name
   end

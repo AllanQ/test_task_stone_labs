@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.3.0'
+gem 'ancestry'
 gem 'bootstrap-sass', '3.3.6'
 gem 'cancancan', '1.13.1'
 gem 'coffee-rails', '4.1.1'

@@ -1,4 +1,4 @@
-<% if next_question = @question.next_question %>
+<% if next_question = @question.next_question(@questions) %>
   <%= link_to 'Next', question_path(next_question,
                                     type_questions: params[:type_questions]),
               id: 'next', class: 'btn btn-success',

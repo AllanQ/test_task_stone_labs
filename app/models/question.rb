@@ -1,4 +1,7 @@
 class Question < ActiveRecord::Base
+
+  # require_relative '../../app/controllers/questions_controller'
+
   belongs_to :question_category
   has_many   :answers, dependent: :destroy
   has_many   :users, through: :answers
@@ -20,18 +23,42 @@ class Question < ActiveRecord::Base
  GROUP BY questions.id")
   }
 
+  def next_question(array_questions)
+    res = array_questions.where(question_category_id: question_category_id)
+                         .where("id > #{id}")
+                         .order(:id)
+                         .first
+    return res if res
+    array_category_sorted = QuestionCategory
+      .sort_by_ancestry(QuestionCategory.all)
+    index_category_current_question = array_category_sorted
+      .index(QuestionCategory.find(question_category_id))
+    array_category_sorted[(index_category_current_question + 1)..-1]
+      .map do |category|
+      res = array_questions.where(question_category_id: category.id)
+                           .order(:id).first
+      return res if res
+    end
+    res
+  end
 
-  # ancestry
-
-  # def next_question
-  #   Question.where("id > #{id}")
-  #   .order(:question_category_id, :id)
-  #   .first
-  # end
-  #
-  # def previous_question
-  #   Question.where("id < #{id}")
-  #   .order(:question_category_id, :id)
-  #   .first
-  # end
+  def previous_question(array_questions)
+    res = array_questions.where(question_category_id: question_category_id)
+            .where("id < #{id}")
+            .order(:id)
+            .last
+    unless res
+      array_category_sorted = QuestionCategory
+        .sort_by_ancestry(QuestionCategory.all)
+      index_category_current_question = array_category_sorted
+        .index(QuestionCategory.find(question_category_id))
+      array_category_sorted[0..(index_category_current_question - 1)].reverse
+        .map do |category|
+        res = array_questions.where(question_category_id: category.id)
+                             .order(:id).last
+        break if res
+      end
+    end
+    res
+  end
 end

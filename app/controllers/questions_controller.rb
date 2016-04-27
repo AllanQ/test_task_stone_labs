@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = scope_questions
+    @category_parent_id =
     respond_to do |format|
       format.html
       format.js
@@ -13,6 +14,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer
                 .find_by(question_id: @question.id, user_id: current_user.id)
+    @questions = scope_questions
     respond_to do |format|
       format.html
       format.js
@@ -26,8 +28,6 @@ class QuestionsController < ApplicationController
       format.js
     end
   end
-
-  private
 
   def scope_questions
     res = Question.all unless params[:type_questions].present? &&

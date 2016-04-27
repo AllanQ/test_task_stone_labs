@@ -113,12 +113,12 @@ RailsAdmin.config do |config|
   end
 
   def full_path(name, category)
-    parent_id = category.question_category_id
-    while parent_id
-      category = QuestionCategory.find(parent_id)
+    parent_category_id = category.question_category_id
+    while parent_category_id
+      category = QuestionCategory.find(parent_category_id)
       parent_name = category.name
       name = "#{parent_name}->#{name}"
-      parent_id = category.question_category_id
+      parent_category_id = category.question_category_id
     end
     name
   end
