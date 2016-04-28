@@ -42,8 +42,7 @@ RailsAdmin.config do |config|
         formatted_value do
           question = bindings[:object]
           category = QuestionCategory.find(question.question_category_id)
-          name = category.name
-          full_path(name, category)
+          full_path(category, true)
         end
       end
       field :text
@@ -58,8 +57,7 @@ RailsAdmin.config do |config|
       field :path do
         formatted_value do
           category = bindings[:object]
-          name = ''
-          full_path(name, category)
+          full_path(category, false)
         end
       end
       field :name
@@ -112,14 +110,27 @@ RailsAdmin.config do |config|
     self.text
   end
 
-  def full_path(name, category)
-    parent_category_id = category.question_category_id
-    while parent_category_id
-      category = QuestionCategory.find(parent_category_id)
-      parent_name = category.name
-      name = "#{parent_name}->#{name}"
-      parent_category_id = category.question_category_id
+  def full_path(category, with_name)
+    if category.ancestry
+      res = ( category.ancestry
+                .split('/')
+                .inject('') do |str, id|
+                "#{str} -> #{QuestionCategory.find(id).name}"
+              end )[3..-1]
+      res = "#{res} -> #{category.name}" if with_name
+    else
+      res = category.name if with_name
     end
-    name
+      res
+
+
+    # parent_category_id = category.question_category_id
+    # while parent_category_id
+    #   category = QuestionCategory.find(parent_category_id)
+    #   parent_name = category.name
+    #   name = "#{parent_name}->#{name}"
+    #   parent_category_id = category.question_category_id
+    # end
+    # name
   end
 end

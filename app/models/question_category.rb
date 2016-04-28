@@ -18,14 +18,27 @@ class QuestionCategory < ActiveRecord::Base
   private
 
   def self.build_category_full_name(category)
-    name = category.name
-    parent_category_id = category.question_category_id
-    while parent_category_id
-      category = QuestionCategory.find(parent_category_id)
-      parent_name = category.name
-      name = "#{parent_name}->#{name}"
-      parent_category_id = category.question_category_id
+    if category.ancestry
+      # QuestionCategory.find(category.ancestry.split('/').first).name +
+      ( category.ancestry
+          .split('/')
+          .inject('') do |str, id|
+          "#{str} -> #{QuestionCategory.find(id).name}"
+        end +
+        " -> #{category.name}" )[3..-1]
+    else
+      category.name
     end
-    name
+
+
+    # name = category.name
+    # parent_category_id = category.question_category_id
+    # while parent_category_id
+    #   category = QuestionCategory.find(parent_category_id)
+    #   parent_name = category.name
+    #   name = "#{parent_name}->#{name}"
+    #   parent_category_id = category.question_category_id
+    # end
+    # name
   end
 end
