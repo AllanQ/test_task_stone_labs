@@ -64,15 +64,9 @@ RailsAdmin.config do |config|
     end
     edit do
       field :name
-      field :question_category_id, :enum do
-        label 'Parent'
-        formatted_value do
-          enum do
-            QuestionCategory.all.map { |c| [c.name, c.id] } << ['', nil]
-          end
-          parent_id = bindings[:object].question_category_id
-          parent_name = QuestionCategory.find(parent_id).name
-          default_value = [parent_name, parent_id]
+      field :parent_id, :enum do
+        enum_method do
+          :parent_enum
         end
       end
     end
@@ -111,26 +105,13 @@ RailsAdmin.config do |config|
   end
 
   def full_path(category, with_name)
-    if category.ancestry
-      res = ( category.ancestry
-                .split('/')
-                .inject('') do |str, id|
-                "#{str} -> #{QuestionCategory.find(id).name}"
-              end )[3..-1]
+    if category.ancestors.length > 0
+      res = ( category.ancestors.inject('') { |str, anc_category|
+        "#{str} -> #{anc_category.name}" } )[3..-1]
       res = "#{res} -> #{category.name}" if with_name
     else
       res = category.name if with_name
     end
-      res
-
-
-    # parent_category_id = category.question_category_id
-    # while parent_category_id
-    #   category = QuestionCategory.find(parent_category_id)
-    #   parent_name = category.name
-    #   name = "#{parent_name}->#{name}"
-    #   parent_category_id = category.question_category_id
-    # end
-    # name
+    res
   end
 end

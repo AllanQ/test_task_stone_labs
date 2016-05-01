@@ -32,9 +32,9 @@ class QuestionsController < ApplicationController
   def scope_questions
     res = Question.all unless params[:type_questions].present? &&
                               params[:type_questions] != 'All questions'
-    res = Question.with_user_answers(current_user.id) \
+    res = Question.joins_answers(current_user.id, true).group('questions.id') \
                        if params[:type_questions] == 'Questions with answers'
-    res = Question.without_user_answers(current_user.id) \
+    res = Question.joins_answers(current_user.id, false).group('questions.id') \
                        if params[:type_questions] == 'Questions without answers'
     res
   end

@@ -4,10 +4,14 @@ class QuestionCategory < ActiveRecord::Base
 
   has_many   :questions, dependent: :destroy
 
-  has_ancestry
-
   validates_associated :questions
   validates :name, presence: true, uniqueness: true, length: { minimum: 3 }
+
+  has_ancestry
+
+  def parent_enum
+    QuestionCategory.where.not(id: id).map { |c| [ c.name, c.id ] }
+  end
 
   scope :main, -> { where(question_category_id: nil) }
 
@@ -18,27 +22,14 @@ class QuestionCategory < ActiveRecord::Base
   private
 
   def self.build_category_full_name(category)
-    if category.ancestry
-      # QuestionCategory.find(category.ancestry.split('/').first).name +
-      ( category.ancestry
-          .split('/')
-          .inject('') do |str, id|
-          "#{str} -> #{QuestionCategory.find(id).name}"
-        end +
+    if category.ancestors.length > 0
+      ( category.ancestors
+                .inject('') do |str, ancestor_category|
+                  "#{str} -> #{ancestor_category.name}"
+                end +
         " -> #{category.name}" )[3..-1]
     else
       category.name
     end
-
-
-    # name = category.name
-    # parent_category_id = category.question_category_id
-    # while parent_category_id
-    #   category = QuestionCategory.find(parent_category_id)
-    #   parent_name = category.name
-    #   name = "#{parent_name}->#{name}"
-    #   parent_category_id = category.question_category_id
-    # end
-    # name
   end
 end
