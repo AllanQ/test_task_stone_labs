@@ -19,6 +19,17 @@ class QuestionCategory < ActiveRecord::Base
     build_category_full_name(QuestionCategory.find(id))
   end
 
+  # def has_questions?(questions)
+  #   binding.pry
+  #   return true if questions.where(question_category_id: id).length > 0
+  #   QuestionCategory.find(id).children.map do |cat|
+  #     binding.pry
+  #     return true if questions.where(question_category_id: cat.id).length > 0
+  #   end
+  #   binding.pry
+  #   false
+  # end
+
   private
 
   def self.build_category_full_name(category)

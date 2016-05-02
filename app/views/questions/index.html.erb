@@ -6,3 +6,5 @@
     <%= link_to 'New Category', rails_admin.new_path('question_category') %>
   </div>
 <% end %>
+<%= paginate @questions , theme: 'twitter-bootstrap-3',
+                          pagination_class: "pagination-md" %>

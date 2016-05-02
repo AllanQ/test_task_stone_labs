@@ -3,8 +3,7 @@ class QuestionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @questions = scope_questions
-    @category_parent_id =
+    @questions = scope_questions.page params[:page]
     respond_to do |format|
       format.html
       format.js

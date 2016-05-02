@@ -1,27 +1,29 @@
 <ul class="segoepr-font text-left">
   <% question_categories.each do |category| %>
-    <% category_id = category.id %>
-    <li class="text-primary", id="<%= category_id + 10000 %>">
-      <td class="text-primary"><%= category.name %></td>
-      <% if can? :access, :rails_admin %>
-        <td><%= link_to 'Edit',
-                        rails_admin.edit_path(model_name: 'question_category',
-                                              id: category_id),
-                        class: 'btn btn-mini btn-warning' %></td>
-      <% end %>
-      <% if can? :destroy, category %>
-        <td><%= link_to 'Destroy', question_category_path(category),
-                        method: :delete,
-                        data: { confirm: 'Are you sure?' },
-                        class: 'btn btn-mini btn-danger',
-                        remote: true %></td>
-      <% end %>
-      <%= render'questions/shared_index/questions',
-        category_id:    category_id,
-        type_questions: type_questions %>
-      <%= render'questions/shared_index/categories_turn_over',
-        type_questions:      type_questions,
-        question_categories: category.children %>
-    </li>
+      <!-- if category.has_questions?(@questions) -->
+      <% category_id = category.id %>
+      <li class="text-primary", id="<%= category_id + 10000 %>">
+        <td class="text-primary"><%= category.name %></td>
+        <% if can? :access, :rails_admin %>
+          <td><%= link_to 'Edit',
+                          rails_admin.edit_path(model_name: 'question_category',
+                                                id: category_id),
+                          class: 'btn btn-mini btn-warning' %></td>
+        <% end %>
+        <% if can? :destroy, category %>
+          <td><%= link_to 'Destroy', question_category_path(category),
+                          method: :delete,
+                          data: { confirm: 'Are you sure?' },
+                          class: 'btn btn-mini btn-danger',
+                          remote: true %></td>
+        <% end %>
+        <%= render'questions/shared_index/questions',
+                  category_id:    category_id,
+                  type_questions: type_questions %>
+        <%= render'questions/shared_index/categories_turn_over',
+                  type_questions:      type_questions,
+                  question_categories: category.children %>
+      </li>
+      <!-- end -->
   <% end %>
 </ul>
