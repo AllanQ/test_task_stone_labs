@@ -1,7 +1,4 @@
 class QuestionCategory < ActiveRecord::Base
-  has_many   :children, class_name: 'QuestionCategory', dependent: :destroy
-  belongs_to :parent,   class_name: 'QuestionCategory'
-
   has_many   :questions, dependent: :destroy
 
   validates_associated :questions
