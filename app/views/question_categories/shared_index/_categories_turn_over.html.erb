@@ -1,0 +1,49 @@
+<% user_id = current_user.id%>
+<ul class="segoepr-font text-left">
+  <% question_categories.each do |category| %>
+    <% bool_condition = category.has_questions? if
+         type_questions == 'All questions' %>
+    <% bool_condition = category.has_questions_with_answers?(user_id) if
+         type_questions == 'Questions with answers' %>
+    <% bool_condition = category.has_questions_without_answers?(user_id) if
+         type_questions == 'Questions without answers' %>
+    <% category_id = category.id %>
+    <% if bool_condition %>
+      <li class="text-primary", id="<%= category_id + 10000 %>">
+        <td class="text-primary">
+          <%= link_to category.name,
+                      question_category_path(category,
+                                             type_questions: type_questions),
+                      class: 'text-success' %>
+        </td>
+        <%= render'question_categories/shared_index/links/edit_link',
+                  category_id: category.id %>
+        <%= render'question_categories/shared_index/links/destroy_link',
+                  category: category %>
+        <%= render'question_categories/shared_index/categories_turn_over',
+                  type_questions: type_questions,
+                  question_categories: category.children %>
+      </li>
+    <% else %>
+        <% bool_condition = true if type_questions == 'All questions' %>
+        <% bool_condition = category
+          .has_descendants_questions_with_answers?(user_id) if
+             type_questions == 'Questions with answers' %>
+        <% bool_condition =
+             category.has_descendants_questions_without_answers?(user_id) if
+             type_questions == 'Questions without answers' %>
+        <% if bool_condition %>
+          <li class="text-primary", id="<%= category_id + 10000 %>">
+            <td class="text-primary"><%= category.name %></td>
+            <%= render'question_categories/shared_index/links/edit_link',
+                      category_id: category.id %>
+            <%= render'question_categories/shared_index/links/destroy_link',
+                      category: category %>
+            <%= render'question_categories/shared_index/categories_turn_over',
+                      type_questions: type_questions,
+                      question_categories: category.children %>
+          </li>
+        <% end %>
+    <% end %>
+  <% end %>
+</ul>

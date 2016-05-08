@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { sessions: "users/sessions",
                                     registrations: "users/registrations",
                                     passwords:  "users/passwords" }
-  resources :question_categories, only: :destroy
-  resources :questions, only: [:index, :show, :destroy]
+  resources :question_categories, only: [:index, :show, :destroy]
+  resources :questions, only: [:show, :destroy]
   resources :answers,   only: [:create, :update, :destroy]
 end

@@ -8,10 +8,11 @@ class Ability
     else
       can :index, :welcome
       if user.activated
-        # can [:index, :show, :with_answers, :without_answers], Question
-        can :manage, Question
-        cannot :destroy, Question
-        can :manage, Answer, user_id: user.id
+        can    :show,          Question
+        cannot :destroy,       Question
+        can   [:index, :show], QuestionCategory
+        cannot :destroy,       QuestionCategory
+        can    :manage,        Answer, user_id: user.id
       end
     end
   end

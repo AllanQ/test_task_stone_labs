@@ -18,11 +18,11 @@
         </span>
       </td>
     <% end %>
-    <% if can? :index, Question %>
+    <% if can? :index, QuestionCategory %>
       <td>
         <span class="tab2 menu-animation">
           <%= link_to 'Questions',
-                      questions_path(type_questions: 'All questions'),
+                      question_categories_path(type_questions: 'All questions'),
                       class: 'red', id: 'jumping' %>
         </span>
       </td>

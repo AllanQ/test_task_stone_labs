@@ -1,0 +1,20 @@
+<ul class="nav nav-pills link-font">
+  <li>
+    <%= render 'question_categories/shared_index/links/menu_link',
+               type_questions: 'All questions' %>
+  </li>
+  <li class="disabled">
+    <%= render 'question_categories/shared_index/links/menu_link',
+               type_questions: 'Questions with answers' %>
+  </li>
+  <li>
+    <%= render 'question_categories/shared_index/links/menu_link',
+               type_questions: 'Questions without answers' %>
+  </li><br /><br /><br />
+</ul>
+<%= render 'question_categories/shared_index/categories_turn_over',
+  type_questions:      type_questions,
+  question_categories: question_categories %>
+<br />
+<%= render 'question_categories/shared_index/links/new_question' %>
+<br /><br />

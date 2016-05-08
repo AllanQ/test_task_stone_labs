@@ -1,0 +1,7 @@
+<% if can? :access, :rails_admin %>
+  <td>
+    <%= link_to 'Edit', rails_admin.edit_path(model_name: 'question_category',
+                                                      id: category_id),
+                        class: 'btn btn-mini btn-warning' %>
+  </td>
+<% end %>

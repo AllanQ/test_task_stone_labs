@@ -15,12 +15,34 @@ class Question < ActiveRecord::Base
     .group('questions.id')
   }
 
-  def self.scope_questions(type_questions = 'All questions', current_user_id)
-    res = Question.all if type_questions == 'All questions'
-    res = Question.joins_answers(current_user_id, true).group('questions.id') \
-                       if type_questions == 'Questions with answers'
-    res = Question.joins_answers(current_user_id, false).group('questions.id') \
-                       if type_questions == 'Questions without answers'
+  scope :joins_answers_from_category, -> (user_id, is_answered, category_id) {
+    joins_answers(user_id, is_answered)
+    .where("question_category_id = #{category_id}")
+  }
+
+ #  scope :joins_answers_from_category, -> (user_id, is_answered, category_id) {
+ #    select('ARRAY_AGG(answers.id) AS answer_id, questions.*')
+ #      .joins("LEFT JOIN answers\
+ # ON answers.question_id = questions.id AND answers.user_id = #{user_id}")
+ #      .where("question_category_id = #{category_id}")
+ #      .where("answers.id IS#{is_answered ? ' NOT ' : ' '}NULL")
+ #      .group('questions.id')
+ #  }
+
+
+  scope :previous_questions, -> (id) { where("questions.id < #{id}")
+                                      .order('questions.id') }
+  scope :next_questions,     -> (id) { where("questions.id > #{id}")
+                                      .order('questions.id') }
+
+  def self.scope_questions(type_questions = 'All questions', user_id,
+                           category_id)
+    res = Question.where(question_category_id: category_id) if
+      type_questions == 'All questions'
+    res = Question.joins_answers_from_category(user_id, true, category_id) if
+      type_questions == 'Questions with answers'
+    res = Question.joins_answers_from_category(user_id, false, category_id) if
+      type_questions == 'Questions without answers'
     res
   end
 
@@ -44,6 +66,8 @@ class Question < ActiveRecord::Base
   #
   #
   # SELECT *, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC;
+  #
+  # QuestionCategory.select("*, concat(ancestry || '/', id) AS sort_string").order('sort_string')
   #
   #
   # SELECT concat(question_categories.ancestry || '/', question_categories.id) AS sort_string, * FROM questions LEFT OUTER JOIN question_categories ON questions.question_category_id = question_categories.id ORDER BY sort_string ASC;
@@ -95,44 +119,71 @@ class Question < ActiveRecord::Base
   # Question.select('questions.id, questions.text').joins("LEFT OUTER JOIN ( WITH RECURSIVE tree AS ( SELECT id, name, parent_id, CAST(id as text) AS sort_string, 1 AS depth FROM question_categories WHERE parent_id IS NULL UNION ALL SELECT s1.id, s1.name, s1.parent_id, tree.sort_string || '|' || s1.id AS sort_string, tree.depth+1 AS depth FROM tree JOIN question_categories s1 ON s1.parent_id = tree.id ) SELECT depth, name, id, parent_id, sort_string FROM tree ) AS categories ON questions.question_category_id = categories.id").order('sort_string, questions.id')
 
 
-
-  def previous_question(type_questions, current_user_id)
-    questions_scope = scope_questions(type_questions, current_user_id)
-    res = questions_scope.where(question_category_id: question_category_id)
-                         .where("questions.id < #{id}")
-                         .order('questions.id')
-                         .last
+  def previous_question(type_questions, user_id)
+    res = previous_question_in_category(type_questions, user_id, id,
+                                        question_category_id)
     return res if res
-    array_category_sorted = QuestionCategory
-      .sort_by_ancestry(QuestionCategory.all)
+    array_category_sorted           = QuestionCategory.sort_by_ancestry
     index_category_current_question = array_category_sorted
       .index(QuestionCategory.find(question_category_id))
     array_category_sorted[0..(index_category_current_question - 1)].reverse
       .map do |category|
-      res = questions_scope.where(question_category_id: category.id)
-              .order(:id).last
+      res = previous_question_in_category(type_questions, user_id, id,
+                                          category.id)
       return res if res
     end
     res
   end
 
-  def next_question(type_questions, current_user_id)
-    questions_scope = scope_questions(type_questions, current_user_id)
-    res = questions_scope.where(question_category_id: question_category_id)
-                         .where("questions.id > #{id}")
-                         .order('questions.id')
-                         .first
+  def previous_question_in_category(type_questions, user_id, question_id,
+                                    question_category_id)
+    case type_questions
+    when 'All questions'
+      Question.where(question_category_id: question_category_id)
+              .previous_questions(question_id)
+              .last
+    when 'Questions with answers'
+      Question.joins_answers_from_category(user_id, true, question_category_id)
+              .previous_questions(question_id)
+              .last
+    when 'Questions without answers'
+      Question.joins_answers_from_category(user_id, false, question_category_id)
+              .previous_questions(question_id)
+              .last
+    end
+  end
+
+  def next_question(type_questions, user_id)
+    res = previous_question_in_category(type_questions, user_id, id,
+                                        question_category_id)
     return res if res
-    array_category_sorted = QuestionCategory
-      .sort_by_ancestry(QuestionCategory.all)
+    array_category_sorted           = QuestionCategory.sort_by_ancestry
     index_category_current_question = array_category_sorted
       .index(QuestionCategory.find(question_category_id))
     array_category_sorted[(index_category_current_question + 1)..-1]
       .map do |category|
-      res = questions_scope.where(question_category_id: category.id)
-                           .order(:id).first
+      res = previous_question_in_category(type_questions, user_id, id,
+                                          category.id)
       return res if res
     end
     res
+  end
+
+  def next_question_in_category(type_questions, user_id, question_id,
+                                    question_category_id)
+    case type_questions
+      when 'All questions'
+        Question.where(question_category_id: question_category_id)
+          .next_questions(question_id)
+          .first
+      when 'Questions with answers'
+        Question.joins_answers_from_category(user_id, true, question_category_id)
+          .next_questions(question_id)
+          .first
+      when 'Questions without answers'
+        Question.joins_answers_from_category(user_id, false, question_category_id)
+          .next_questions(question_id)
+          .first
+    end
   end
 end
