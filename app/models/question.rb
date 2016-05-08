@@ -14,22 +14,10 @@ class Question < ActiveRecord::Base
     .where("answers.id IS#{is_answered ? ' NOT ' : ' '}NULL")
     .group('questions.id')
   }
-
   scope :joins_answers_from_category, -> (user_id, is_answered, category_id) {
     joins_answers(user_id, is_answered)
     .where("question_category_id = #{category_id}")
   }
-
- #  scope :joins_answers_from_category, -> (user_id, is_answered, category_id) {
- #    select('ARRAY_AGG(answers.id) AS answer_id, questions.*')
- #      .joins("LEFT JOIN answers\
- # ON answers.question_id = questions.id AND answers.user_id = #{user_id}")
- #      .where("question_category_id = #{category_id}")
- #      .where("answers.id IS#{is_answered ? ' NOT ' : ' '}NULL")
- #      .group('questions.id')
- #  }
-
-
   scope :previous_questions, -> (id) { where("questions.id < #{id}")
                                       .order('questions.id') }
   scope :next_questions,     -> (id) { where("questions.id > #{id}")

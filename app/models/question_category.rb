@@ -73,4 +73,63 @@ class QuestionCategory < ActiveRecord::Base
       category.name
     end
   end
+
+  def next_category(type_questions, user_id)
+    array_category_sorted           = QuestionCategory.sort_by_ancestry
+    index_category_current_question = array_category_sorted
+                                        .index(QuestionCategory.find(id))
+    array_length = array_category_sorted.length
+    if array_length - 1 != index_category_current_question
+      case type_questions
+      when 'All questions'
+        return array_category_sorted[index_category_current_question + 1]
+      when 'Questions with answers'
+        array_category_sorted[(index_category_current_question + 1)..-1]
+          .map do |category|
+            if Question.joins_answers_from_category(user_id, true, category.id)
+                       .length > 0
+              return category
+            end
+        end
+      when 'Questions without answers'
+        array_category_sorted[(index_category_current_question + 1)..-1]
+          .map do |category|
+          if Question.joins_answers_from_category(user_id, false, category.id)
+               .length > 0
+            return category
+          end
+        end
+      end
+    end
+    nil
+  end
+
+  def previous_category(type_questions, user_id)
+    array_category_sorted           = QuestionCategory.sort_by_ancestry
+    index_category_current_question = array_category_sorted
+                                        .index(QuestionCategory.find(id))
+    if index_category_current_question != 0
+      case type_questions
+        when 'All questions'
+          return array_category_sorted[index_category_current_question - 1]
+        when 'Questions with answers'
+          array_category_sorted[0..(index_category_current_question - 1)].reverse
+            .map do |category|
+            if Question.joins_answers_from_category(user_id, true, category.id)
+                 .length > 0
+              return category
+            end
+          end
+        when 'Questions without answers'
+          array_category_sorted[0..(index_category_current_question - 1)].reverse
+            .map do |category|
+            if Question.joins_answers_from_category(user_id, false, category.id)
+                 .length > 0
+              return category
+            end
+          end
+      end
+    end
+    nil
+  end
 end
