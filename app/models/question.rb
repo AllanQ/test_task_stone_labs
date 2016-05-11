@@ -49,41 +49,6 @@ class Question < ActiveRecord::Base
     res
   end
 
-  def previous_question_in_category(type_questions, user_id, question_id,
-                                    question_category_id)
-    case type_questions
-    when 'All questions'
-      Question.where(question_category_id: question_category_id)
-              .previous_questions(question_id)
-              .last
-    when 'Questions with answers'
-      Question.joins_answers_from_category(user_id, true, question_category_id)
-              .previous_questions(question_id)
-              .last
-    when 'Questions without answers'
-      Question.joins_answers_from_category(user_id, false, question_category_id)
-              .previous_questions(question_id)
-              .last
-    end
-  end
-
-  def last_question_in_category(type_questions, user_id, question_category_id)
-    case type_questions
-    when 'All questions'
-      Question.where(question_category_id: question_category_id)
-              .order('questions.id')
-              .last
-    when 'Questions with answers'
-      Question.joins_answers_from_category(user_id, true, question_category_id)
-              .order('questions.id')
-              .last
-    when 'Questions without answers'
-      Question.joins_answers_from_category(user_id, false, question_category_id)
-              .order('questions.id')
-              .last
-    end
-  end
-
   def next_question(type_questions, user_id)
     res = next_question_in_category(type_questions, user_id, id,
                                         question_category_id)
@@ -99,21 +64,58 @@ class Question < ActiveRecord::Base
     res
   end
 
-  def next_question_in_category(type_questions, user_id, question_id,
+  private
+
+  def previous_question_in_category(type_questions, user_id, question_id,
                                     question_category_id)
     case type_questions
-    when 'All questions'
-      Question.where(question_category_id: question_category_id)
-              .next_questions(question_id)
-              .first
-    when 'Questions with answers'
-      Question.joins_answers_from_category(user_id, true, question_category_id)
-              .next_questions(question_id)
-              .first
-    when 'Questions without answers'
-      Question.joins_answers_from_category(user_id, false, question_category_id)
-              .next_questions(question_id)
-              .first
+      when 'All questions'
+        Question.where(question_category_id: question_category_id)
+          .previous_questions(question_id)
+          .last
+      when 'Questions with answers'
+        Question.joins_answers_from_category(user_id, true, question_category_id)
+          .previous_questions(question_id)
+          .last
+      when 'Questions without answers'
+        Question.joins_answers_from_category(user_id, false, question_category_id)
+          .previous_questions(question_id)
+          .last
+    end
+  end
+
+  def next_question_in_category(type_questions, user_id, question_id,
+                                question_category_id)
+    case type_questions
+      when 'All questions'
+        Question.where(question_category_id: question_category_id)
+          .next_questions(question_id)
+          .first
+      when 'Questions with answers'
+        Question.joins_answers_from_category(user_id, true, question_category_id)
+          .next_questions(question_id)
+          .first
+      when 'Questions without answers'
+        Question.joins_answers_from_category(user_id, false, question_category_id)
+          .next_questions(question_id)
+          .first
+    end
+  end
+
+  def last_question_in_category(type_questions, user_id, question_category_id)
+    case type_questions
+      when 'All questions'
+        Question.where(question_category_id: question_category_id)
+          .order('questions.id')
+          .last
+      when 'Questions with answers'
+        Question.joins_answers_from_category(user_id, true, question_category_id)
+          .order('questions.id')
+          .last
+      when 'Questions without answers'
+        Question.joins_answers_from_category(user_id, false, question_category_id)
+          .order('questions.id')
+          .last
     end
   end
 
