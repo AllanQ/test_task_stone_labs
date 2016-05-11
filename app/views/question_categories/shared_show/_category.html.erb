@@ -47,3 +47,11 @@
     <%= render 'question_categories/shared_show/buttons/button_next_category' %>
   </div><br />
 </div><br /><br />
+<%= render 'question_categories/shared_index/links/new_question' %></br></br>
+<div>
+  <%= link_to 'Back to categories', question_categories_path(
+    type_questions: type_questions),
+              class: 'btn btn-primary' %>
+</div></br></br>
+<%= paginate @questions , theme: 'twitter-bootstrap-3',
+             pagination_class: "pagination-md"  %>
