@@ -13,7 +13,8 @@ class QuestionCategoriesController < ApplicationController
     @category = QuestionCategory.find(params[:id])
     @questions = Question.scope_questions(params[:type_questions],
                                           current_user.id,
-                                          params[:id]).page params[:page]
+                                          params[:id]).page(params[:page])
+                                                      .per(params[:per])
     respond_to do |format|
       format.html
       format.js

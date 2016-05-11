@@ -1,4 +1,8 @@
 <p class="segoepr-font-25-blue">Questions list</p></br>
-<span class="category">
+<span id="category">
   <%= render 'question_categories/shared_show/category' %>
+</span>
+<span>
+  <%= paginate @questions, theme: 'twitter-bootstrap-3',
+                           pagination_class: "pagination-md"  %>
 </span>
