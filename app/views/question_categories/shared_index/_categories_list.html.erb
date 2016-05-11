@@ -1,6 +1,5 @@
-<% type_questions = params[:type_questions] ?
-  params[:type_questions] : 'All questions' %>
-<h2 class="header-font"><%= type_questions %></h2><br />
+<% type_questions = params[:type_questions] ? params[:type_questions] : 'All questions' %>
+<p class="header-font segoepr-font25"><%= type_questions %></p><br />
 <% case type_questions %>
 <% when 'All questions' %>
   <%= render 'question_categories/shared_index/type_questions_menu/all',
