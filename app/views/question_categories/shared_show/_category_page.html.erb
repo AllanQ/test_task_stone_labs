@@ -1,0 +1,55 @@
+<% type_questions = params[:type_questions] %>
+<p class="header-font segoepr-font25">
+  <%= type_questions %>
+</p>
+<p class="segoepr-font25 text-primary">
+  <%= QuestionCategory.build_category_full_name(@category) %>
+</p></br></br></br>
+<div class="row">
+  <div class="col-md-1 col-md-offset-2"><br /><br /><br /><br />
+    <%= render 'question_categories/shared_show/buttons/button_previous_category' %>
+  </div>
+  <div class="field col-md-6">
+    <ul class="segoepr-font25 text-left">
+      <li class="segoepr-font30 text-left text-primary">
+        <%= @category.name %></li>
+      </br>
+      <ul>
+        <% @questions.each do |question| %>
+            <% question_id = question.id %>
+            <li class="question", id="<%= question_id %>">
+              <td>
+                <% answer = Answer.find_by(question_id: question_id,
+                                           user_id: current_user.id) %>
+                <% if answer %>
+                    <%= link_to question.text,
+                                question_path(question,
+                                              type_questions: type_questions),
+                                class: 'text-success' %>
+                <% else %>
+                    <%= link_to question.text,
+                                question_path(question,
+                                              type_questions: type_questions),
+                                class: 'text-warning' %>
+                <% end %>
+              </td>
+              <%= render 'question_categories/shared_show/links/edit_question_link',
+                         question_id: question_id %>
+              <%= render'question_categories/shared_show/links/destroy_question_link',
+                        question: question,
+                        question_id: question_id %>
+            </li>
+        <% end %>
+      </ul>
+    </ul>
+  </div><br />
+  <div class="col-md-1"><br /><br /><br />
+    <%= render 'question_categories/shared_show/buttons/button_next_category' %>
+  </div><br />
+</div><br /><br />
+<%= render 'question_categories/shared_index/links/new_question' %></br></br>
+<div>
+  <%= link_to 'Back to categories', question_categories_path(
+    type_questions: type_questions),
+              class: 'btn btn-primary' %>
+</div></br></br>
