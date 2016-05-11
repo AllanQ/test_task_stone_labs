@@ -82,7 +82,10 @@ class QuestionCategory < ActiveRecord::Base
     if array_length - 1 != index_category_current_question
       case type_questions
       when 'All questions'
-        return array_category_sorted[index_category_current_question + 1]
+        array_category_sorted[(index_category_current_question + 1)..-1]
+          .map do |category|
+          return category if category.has_questions?
+        end
       when 'Questions with answers'
         array_category_sorted[(index_category_current_question + 1)..-1]
           .map do |category|
@@ -111,7 +114,10 @@ class QuestionCategory < ActiveRecord::Base
     if index_category_current_question != 0
       case type_questions
         when 'All questions'
-          return array_category_sorted[index_category_current_question - 1]
+          array_category_sorted[0..(index_category_current_question - 1)].reverse
+            .map do |category|
+            return category if category.has_questions?
+          end
         when 'Questions with answers'
           array_category_sorted[0..(index_category_current_question - 1)].reverse
             .map do |category|

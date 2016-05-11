@@ -1,8 +1,9 @@
+<p class="segoepr-font-25-blue">Category list</p></br>
 <span class="categories-list">
   <%= render 'question_categories/shared_index/categories_list' %>
 </span>
 <% if can? :access, :rails_admin %>
-  <div class="segoepr-font">
+  <div class="segoepr25-font">
     <%= link_to 'New Category', rails_admin.new_path('question_category') %>
   </div>
 <% end %>

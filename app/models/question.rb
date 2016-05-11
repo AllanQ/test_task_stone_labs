@@ -116,8 +116,7 @@ class Question < ActiveRecord::Base
       .index(QuestionCategory.find(question_category_id))
     array_category_sorted[0..(index_category_current_question - 1)].reverse
       .map do |category|
-      res = previous_question_in_category(type_questions, user_id, id,
-                                          category.id)
+      res = last_question_in_category(type_questions, user_id, category.id)
       return res if res
     end
     res
@@ -141,8 +140,25 @@ class Question < ActiveRecord::Base
     end
   end
 
+  def last_question_in_category(type_questions, user_id, question_category_id)
+    case type_questions
+    when 'All questions'
+      Question.where(question_category_id: question_category_id)
+              .order('questions.id')
+              .last
+    when 'Questions with answers'
+      Question.joins_answers_from_category(user_id, true, question_category_id)
+              .order('questions.id')
+              .last
+    when 'Questions without answers'
+      Question.joins_answers_from_category(user_id, false, question_category_id)
+              .order('questions.id')
+              .last
+    end
+  end
+
   def next_question(type_questions, user_id)
-    res = previous_question_in_category(type_questions, user_id, id,
+    res = next_question_in_category(type_questions, user_id, id,
                                         question_category_id)
     return res if res
     array_category_sorted           = QuestionCategory.sort_by_ancestry
@@ -150,8 +166,7 @@ class Question < ActiveRecord::Base
       .index(QuestionCategory.find(question_category_id))
     array_category_sorted[(index_category_current_question + 1)..-1]
       .map do |category|
-      res = previous_question_in_category(type_questions, user_id, id,
-                                          category.id)
+      res = first_question_in_category(type_questions, user_id, category.id)
       return res if res
     end
     res
@@ -160,18 +175,35 @@ class Question < ActiveRecord::Base
   def next_question_in_category(type_questions, user_id, question_id,
                                     question_category_id)
     case type_questions
-      when 'All questions'
-        Question.where(question_category_id: question_category_id)
-          .next_questions(question_id)
-          .first
-      when 'Questions with answers'
-        Question.joins_answers_from_category(user_id, true, question_category_id)
-          .next_questions(question_id)
-          .first
-      when 'Questions without answers'
-        Question.joins_answers_from_category(user_id, false, question_category_id)
-          .next_questions(question_id)
-          .first
+    when 'All questions'
+      Question.where(question_category_id: question_category_id)
+              .next_questions(question_id)
+              .first
+    when 'Questions with answers'
+      Question.joins_answers_from_category(user_id, true, question_category_id)
+              .next_questions(question_id)
+              .first
+    when 'Questions without answers'
+      Question.joins_answers_from_category(user_id, false, question_category_id)
+              .next_questions(question_id)
+              .first
+    end
+  end
+
+  def first_question_in_category(type_questions, user_id, question_category_id)
+    case type_questions
+    when 'All questions'
+      Question.where(question_category_id: question_category_id)
+              .order('questions.id')
+              .first
+    when 'Questions with answers'
+      Question.joins_answers_from_category(user_id, true, question_category_id)
+              .order('questions.id')
+              .first
+    when 'Questions without answers'
+      Question.joins_answers_from_category(user_id, false, question_category_id)
+              .order('questions.id')
+              .first
     end
   end
 end

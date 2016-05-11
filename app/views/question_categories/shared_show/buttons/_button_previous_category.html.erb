@@ -1,7 +1,7 @@
 <% if previous_category = @category.previous_category(params[:type_questions],
                                                       current_user.id) %>
-    <%= link_to 'Previous', question_category_path(previous_category,
+    <%= link_to 'Previous category', question_category_path(previous_category,
                                        type_questions: params[:type_questions]),
-                id: 'previous', class: 'btn btn-primary',
-                remote: true if previous_category %>
+                                      class: 'btn btn-primary',
+                                      remote: true if previous_category %>
 <% end %>
