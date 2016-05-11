@@ -1,11 +1,9 @@
-<p class="segoepr-font-25-blue">Category list</p></br>
+<p class="segoepr-font-25-blue">Categories list</p></br>
 <span class="categories-list">
   <%= render 'question_categories/shared_index/categories_list' %>
 </span>
 <% if can? :access, :rails_admin %>
-  <div class="segoepr25-font">
+  <div class="segoepr-font25">
     <%= link_to 'New Category', rails_admin.new_path('question_category') %>
   </div>
 <% end %>
- <!--paginate @questions , theme: 'twitter-bootstrap-3',-->
-                          <!--pagination_class: "pagination-md" -->

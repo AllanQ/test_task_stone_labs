@@ -3,7 +3,6 @@ class QuestionCategoriesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    # @categories = QuestionCategory.sorted   # .page params[:page]
     respond_to do |format|
       format.html
       format.js
@@ -13,7 +12,8 @@ class QuestionCategoriesController < ApplicationController
   def show
     @category = QuestionCategory.find(params[:id])
     @questions = Question.scope_questions(params[:type_questions],
-                                          current_user.id, params[:id])
+                                          current_user.id,
+                                          params[:id]).page params[:page]
     respond_to do |format|
       format.html
       format.js
