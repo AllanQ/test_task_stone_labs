@@ -1,2 +1,2 @@
 $('#category_page').html("#{escape_javascript(render 'question_categories/shared_show/category_page')}");
-$('#paginator').html("#{escape_javascript(paginate(@questions, :remote => true)) }");
+$('#paginator').html("#{escape_javascript(paginate(@questions, remote: true))}");

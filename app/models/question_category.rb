@@ -113,27 +113,27 @@ class QuestionCategory < ActiveRecord::Base
                                         .index(QuestionCategory.find(id))
     if index_category_current_question != 0
       case type_questions
-        when 'All questions'
-          array_category_sorted[0..(index_category_current_question - 1)].reverse
-            .map do |category|
-            return category if category.has_questions?
+      when 'All questions'
+        array_category_sorted[0..(index_category_current_question - 1)].reverse
+          .map do |category|
+          return category if category.has_questions?
+        end
+      when 'Questions with answers'
+        array_category_sorted[0..(index_category_current_question - 1)].reverse
+          .map do |category|
+          if Question.joins_answers_from_category(user_id, true, category.id)
+               .length > 0
+            return category
           end
-        when 'Questions with answers'
-          array_category_sorted[0..(index_category_current_question - 1)].reverse
-            .map do |category|
-            if Question.joins_answers_from_category(user_id, true, category.id)
-                 .length > 0
-              return category
-            end
+        end
+      when 'Questions without answers'
+        array_category_sorted[0..(index_category_current_question - 1)].reverse
+          .map do |category|
+          if Question.joins_answers_from_category(user_id, false, category.id)
+               .length > 0
+            return category
           end
-        when 'Questions without answers'
-          array_category_sorted[0..(index_category_current_question - 1)].reverse
-            .map do |category|
-            if Question.joins_answers_from_category(user_id, false, category.id)
-                 .length > 0
-              return category
-            end
-          end
+        end
       end
     end
     nil
