@@ -1,0 +1,34 @@
+<% if question_categories.count == 0 %>
+  <%= render 'questions/shared_index/message',
+             message: "There are not neither categories nor questions yet.\n
+                     Create at least one category, before create a question" %>
+<% else %>
+  <% if @questions.count == 0  %>
+    <%= render 'questions/shared_index/message',
+               message: 'There are not any questions yet' %>
+  <% else %>
+    <ul class="nav nav-pills link-font blue">
+      <li class="disabled">
+        <%= render 'questions/shared_index/links/menu_link',
+                   type_questions: 'All questions' %>
+      </li>
+      <li>
+        <%= render 'questions/shared_index/links/menu_link',
+                   type_questions: 'Questions with answers' %>
+      </li>
+      <li>
+        <%= render 'questions/shared_index/links/menu_link',
+                   type_questions: 'Questions without answers' %>
+      </li><br /><br /><br />
+    </ul>
+    <% while @index_questions < @length_questions do %>
+      <% category = @questions[@index_questions].question_category %>
+      <% binding.pry %>
+      <%= render 'questions/shared_index/categories_turn_over',
+                type_questions:     type_questions,
+                category:           category,
+                array_ancestor_ids: [] %>
+    <% end %>
+  <% end %><br />
+  <%= render 'questions/shared_index/links/new_question_link' %>
+<% end %><br /><br />

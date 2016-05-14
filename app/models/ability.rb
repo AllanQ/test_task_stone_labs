@@ -8,7 +8,7 @@ class Ability
     else
       can :index, :welcome
       if user.activated
-        can    :show,          Question
+        can   [:index, :show], Question
         cannot :destroy,       Question
         can   [:index, :show], QuestionCategory
         cannot :destroy,       QuestionCategory

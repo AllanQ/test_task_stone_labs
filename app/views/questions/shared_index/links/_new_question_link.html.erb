@@ -1,0 +1,5 @@
+<% if can? :access, :rails_admin %>
+    <div class="segoepr-font25">
+      <%= link_to 'New Question', rails_admin.new_path('question') %>
+    </div>
+<% end %><br />

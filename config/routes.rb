@@ -6,6 +6,6 @@ Rails.application.routes.draw do
                                     registrations: "users/registrations",
                                     passwords:  "users/passwords" }
   resources :question_categories, only: [:index, :show, :destroy]
-  resources :questions, only: [:show, :destroy]
+  resources :questions, only: [:index, :show, :destroy]
   resources :answers,   only: [:create, :update, :destroy]
 end

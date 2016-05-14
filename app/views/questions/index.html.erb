@@ -1,0 +1,10 @@
+<span class="questions-list">
+  <%= render 'questions/shared_index/questions_list' %>
+</span>
+<% if can? :access, :rails_admin %>
+    <div class="segoepr-font">
+      <%= link_to 'New Category', rails_admin.new_path('question_category') %>
+    </div>
+<% end %>
+<!--paginate @questions , theme: 'twitter-bootstrap-3',-->
+<!--pagination_class: "pagination-md" -->

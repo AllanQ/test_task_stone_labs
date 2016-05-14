@@ -10,7 +10,7 @@
 
 body {
   background-color: #333;
-  background: url('chalkboard.jpg') no-repeat center center fixed;
+  background: url('chalkboard2.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -75,7 +75,7 @@ body {
 //NAVBAR MENU
 /* title */
 .navbar-inverse {
-  background-image: url('navbar-chalkboard.jpg')
+  background-image: url('navbar-chalkboard2.jpg')
 }
 .navbar-inverse .navbar-brand {
   color: #00CCFF;
@@ -105,7 +105,7 @@ body {
 
 .navbar-inverse .navbar-nav .open .dropdown-menu>li>a,
 .navbar-inverse .navbar-nav .open .dropdown-menu {
-  background-image: url('navbar-chalkboard.jpg');
+  background-image: url('navbar-chalkboard2.jpg');
   color:#00CCFF;
 }
 //NAVBAR BODER
@@ -131,20 +131,20 @@ body {
   }
 }
 
-//Categories & Questions
-
-.segoepr-font-25-blue{
-  font-size: 25px;
-  font-family: segoepr;
-  color: #0099FF;
-}
-
-.segoepr-font25{
-  font-size: 25px;
-  font-family: segoepr;
-}
-
-.segoepr-font30{
-  font-size: 30px;
-  font-family: segoepr;
-}
+////Categories & Questions
+//
+//.segoepr-font-25-blue{
+//  font-size: 25px;
+//  font-family: segoepr;
+//  color: #0099FF;
+//}
+//
+//.segoepr-font25{
+//  font-size: 25px;
+//  font-family: segoepr;
+//}
+//
+//.segoepr-font30{
+//  font-size: 30px;
+//  font-family: segoepr;
+//}

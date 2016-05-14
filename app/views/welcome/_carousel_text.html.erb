@@ -18,14 +18,22 @@
         </span>
       </td>
     <% end %>
-    <% if can? :index, QuestionCategory %>
+    <% if can? :index, Question %>
       <td>
         <span class="tab2 menu-animation">
           <%= link_to 'Questions',
-                      question_categories_path(type_questions: 'All questions'),
+                      questions_path(type_questions: 'All questions'),
                       class: 'red', id: 'jumping' %>
         </span>
       </td>
+    <% end %>
+    <% if can? :index, QuestionCategory %>
+        <td>
+        <span class="tab2 menu-animation">
+          <%= link_to 'Categories',
+                    question_categories_path(type_questions: 'All questions') %>
+        </span>
+        </td>
     <% end %>
     <% if current_user.activated == true %>
       <td>

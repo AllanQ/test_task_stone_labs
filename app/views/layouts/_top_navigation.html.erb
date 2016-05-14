@@ -27,8 +27,8 @@
             <% if current_user && current_user.activated == true %>
               <% if current_page?(controller: '/question_categories') %>
                 <li class="active">
-                  <%= link_to '', question_categories_path(type_questions:
-                                                             'All questions'),
+                  <%= link_to '', questions_path(type_questions:
+                                                   'All questions'),
                                   class: 'glyphicon glyphicon-list' %>
                 </li>
                 <li>
@@ -37,8 +37,8 @@
                 </li>
               <% else %>
                 <li>
-                  <%= link_to '', question_categories_path(type_questions:
-                                                             'All questions'),
+                  <%= link_to '', questions_path(type_questions:
+                                                   'All questions'),
                                   class: 'glyphicon glyphicon-list' %></li>
                 </li>
                 <% if current_page?(controller: 'users/registrations',
