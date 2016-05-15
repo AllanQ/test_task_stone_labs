@@ -1,0 +1,23 @@
+<ul class="nav nav-pills link-font">
+  <li>
+    <%= render 'questions/shared_index/links/menu_link',
+               type_questions: 'All questions' %>
+  </li>
+  <li class="disabled">
+    <%= render 'questions/shared_index/links/menu_link',
+               type_questions: 'Questions with answers' %>
+  </li>
+  <li>
+    <%= render 'questions/shared_index/links/menu_link',
+               type_questions: 'Questions without answers' %>
+  </li><br /><br /><br />
+</ul>
+<% if !@questions || @questions == [] %>
+  <%= render 'questions/shared_index/message',
+             message: 'There are not any answers yet' %>
+<% else %>
+  <%= render 'questions/shared_index/questions_paginate',
+             type_questions: 'Questions with answers' %>
+  <br />
+  <%= render 'questions/shared_index/links/new_question_link' %>
+<% end %><br /><br />

@@ -1,0 +1,10 @@
+<% while @index_questions < @length_questions do %>
+  <% category = @questions[@index_questions].question_category %>
+  <% array_ancestor_ids = category.ancestor_ids << category.id %>
+  <% next_category = QuestionCategory.find(array_ancestor_ids[0]) %>
+  <% array_ancestor_ids = array_ancestor_ids[1..-1] %>
+  <%= render 'questions/shared_index/questions_paginate/categories',
+             type_questions:     type_questions,
+             category:           next_category,
+             array_ancestor_ids: array_ancestor_ids %>
+<% end %>

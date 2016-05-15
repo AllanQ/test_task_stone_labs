@@ -5,7 +5,8 @@ class QuestionsController < ApplicationController
   def index
     @questions = Question
                    .scope_questions(params[:type_questions], current_user.id)
-    # .page params[:page]
+                   .page(params[:page])
+                   .per(params[:per])
     @length_questions = @questions.length
     @index_questions = 0
     respond_to do |format|

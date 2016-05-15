@@ -1,0 +1,14 @@
+<% type_questions = params[:type_questions] ?
+  params[:type_questions] : 'All questions' %>
+<h2 class="header-font"><%= type_questions %></h2><br />
+<% case type_questions %>
+<% when 'All questions' %>
+  <%= render 'questions/shared_index/type_questions_menu_items/all',
+             type_questions: type_questions %>
+<% when 'Questions with answers' %>
+  <%= render 'questions/shared_index/type_questions_menu_items/with_answers',
+             type_questions: type_questions %>
+<% when 'Questions without answers' %>
+  <%= render 'questions/shared_index/type_questions_menu_items/without_answers',
+             type_questions: type_questions %>
+<% end %>

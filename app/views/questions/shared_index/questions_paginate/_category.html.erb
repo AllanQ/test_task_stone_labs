@@ -4,38 +4,36 @@
   <%= render 'questions/shared_index/links/edit_link',
              category_id: category_id %>
   <%= render 'questions/shared_index/links/destroy_link', category: category %>
-  <% binding.pry %>
   <% unless array_ancestor_ids.empty? %>
     <% next_category = QuestionCategory.find(array_ancestor_ids[0]) %>
     <% array_ancestor_ids = array_ancestor_ids[1..-1] %>
-    <%= render 'questions/shared_index/categories_turn_over',
+    <%= render 'questions/shared_index/questions_paginate/categories',
                type_questions:     type_questions,
                category:           next_category,
                array_ancestor_ids: array_ancestor_ids %>
   <% else %>
     <% while @index_questions < @length_questions do %>
       <% question = @questions[@index_questions] %>
-      <% binding.pry %>
       <% if question.question_category_id == category_id %>
         <ul class="segoepr-font">
-          <%= render 'questions/shared_index/question',
-                     type_questions: type_questions %>
-          @index_questions += 1
+          <%= render 'questions/shared_index/questions_paginate/question',
+                     type_questions: type_questions,
+                     question:       question %>
+          <% @index_questions += 1 %>
         </ul>
       <% else %>
         <% next_category = question.question_category %>
         <% array_ancestor_ids = next_category.ancestor_ids %>
-        <% binding.pry %>
         <% if category_index = array_ancestor_ids.index(category_id) %>
           <% array_ancestor_ids = array_ancestor_ids << next_category.id %>
-          <% array_ancestor_ids = array_ancestor_ids[category_index+1..-1] %>
-          <% next_category = QuestionCategory.find(array_ancestor_ids[0]) %>
-          <%= render 'questions/shared_index/categories_turn_over',
+          <% next_category = QuestionCategory
+                               .find(array_ancestor_ids[category_index+1]) %>
+          <% array_ancestor_ids = array_ancestor_ids[category_index+2..-1] %>
+          <%= render 'questions/shared_index/questions_paginate/categories',
                      type_questions:     type_questions,
                      category:           next_category,
                      array_ancestor_ids: array_ancestor_ids %>
         <% end %>
-        <% binding.pry %>
         <% break %>
       <% end %>
     <% end %>

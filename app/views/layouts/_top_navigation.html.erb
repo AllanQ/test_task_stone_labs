@@ -25,7 +25,7 @@
               </li>
             <% end %>
             <% if current_user && current_user.activated == true %>
-              <% if current_page?(controller: '/question_categories') %>
+              <% if current_page?(controller: '/questions') %>
                 <li class="active">
                   <%= link_to '', questions_path(type_questions:
                                                    'All questions'),

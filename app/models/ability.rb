@@ -10,7 +10,6 @@ class Ability
       if user.activated
         can   [:index, :show], Question
         cannot :destroy,       Question
-        can   [:index, :show], QuestionCategory
         cannot :destroy,       QuestionCategory
         can    :manage,        Answer, user_id: user.id
       end
