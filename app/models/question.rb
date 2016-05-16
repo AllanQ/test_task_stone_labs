@@ -8,20 +8,61 @@ class Question < ActiveRecord::Base
   validates :text, uniqueness: true, length: { minimum: 3 }
 
   scope :joins_answers, -> (user_id, is_answered) {
+    query = <<-SQL
+      LEFT OUTER JOIN answers
+                   ON answers.question_id = questions.id
+                  AND answers.user_id = #{user_id}
+    SQL
     select('ARRAY_AGG(answers.id) AS answer_id, questions.*')
-    .joins("LEFT JOIN answers\
- ON answers.question_id = questions.id AND answers.user_id = #{user_id}")
-    .where("answers.id IS#{is_answered ? ' NOT ' : ' '}NULL")
-    .group('questions.id')
+      .joins(query)
+      .where("answers.id IS#{is_answered ? ' NOT ' : ' '}NULL")
+      .group('questions.id')
   }
-
   scope :order_by_categories, -> {
-    order("idx(array(SELECT id\
- FROM (SELECT id, concat(ancestry || '/', id) AS sort_string\
- FROM question_categories ORDER BY sort_string ASC) AS category_id),\
- question_category_id), id")
+    query = <<-SQL
+      IDX(ARRAY(SELECT id
+                  FROM  (SELECT id, concat(ancestry || '/', id) AS sort_string
+                           FROM question_categories
+                       ORDER BY sort_string ASC) AS category_id),
+          question_category_id),
+      id
+    SQL
+    order(query)
   }
-
+  scope :next_or_previous_question, -> (user_id, is_answered, is_next, id) {
+    sub_query = <<-SQL
+      (          SELECT ARRAY_AGG(answers.id) AS answer_id, questions.*
+                   FROM questions
+        LEFT OUTER JOIN answers
+                     ON answers.question_id = questions.id
+                    AND answers.user_id = #{user_id}
+                  WHERE answers.id IS#{is_answered ? ' NOT ' : ' '}NULL
+               GROUP BY questions.id
+      ) AS scope_questions
+    SQL
+    query = <<-SQL
+      SELECT *
+        FROM (SELECT *,
+                     #{is_next ? 'LAG' : 'LEAD'}(id) OVER (
+                       ORDER BY IDX(array(SELECT id
+                                            FROM  (SELECT id,
+                                                          CONCAT(
+                                                            ancestry || '/',
+                                                            id
+                                                          ) AS sort_string
+                                                     FROM question_categories
+                                                 ORDER BY sort_string ASC)
+                                              AS category_id),
+                                     question_category_id),
+                                id
+                     )
+                FROM #{is_answered == nil ? 'questions' : sub_query})
+          AS next_or_previous_questions
+       WHERE #{is_next ? 'lag' : 'lead'} = #{id}
+    SQL
+    find_by_sql(query)
+  }
+  
   #
   # SELECT *, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC;
   # arr = QuestionCategory.select("*, concat(ancestry || '/', id) AS sort_string").order('sort_string').map{ |c| c.id }
@@ -33,34 +74,37 @@ class Question < ActiveRecord::Base
   # SELECT * FROM questions ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id;
   #
   #
-  # ???? SELECT id FROM questions ORDER BY idx(array[1, 27, 28, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id OVER lag(SELECT * FROM questions LIMIT 1)
-
-
-
-
+  #
+  # SELECT id, lag(id) OVER (ORDER BY idx(array[1, 27, 28, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id) FROM questions;
+  #
+  # SELECT id, lead(id) OVER (ORDER BY idx(array[1, 27, 28, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id) FROM questions;
+  #
+  #
+  # SELECT id, lag(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions;
+  #
+  # SELECT id, lead(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions;
+  #
+  #
+  # SELECT * FROM (SELECT *, lead(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions) AS next_questions WHERE lead = 2;
+  #
+  # SELECT * FROM (SELECT *, lag(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions) AS next_questions WHERE lag = 1;
+  #
 
   def self.scope_questions(type_questions = 'All questions', current_user_id)
-    # arr = QuestionCategory.select("*, concat(ancestry || '/', id) AS sort_string")
-    #                       .order('sort_string')
-    #                       .map{ |c| c.id }
-    res = Question.all.order_by_categories if type_questions == 'All questions'       # .order("idx(array#{arr}, question_category_id), id") \
+    res = Question.all if type_questions == 'All questions'
     res = Question.joins_answers(current_user_id, true)
-                  .group('questions.id')
-                  .order_by_categories \
-                                if type_questions == 'Questions with answers'   # .order("idx(array#{arr}, question_category_id), id") \
+            .group('questions.id') \
+                       if type_questions == 'Questions with answers'
     res = Question.joins_answers(current_user_id, false)
-                  .group('questions.id')
-                  .order_by_categories \
-                                if type_questions == 'Questions without answers' # .order("idx(array#{arr}, question_category_id), id") \
+            .group('questions.id') \
+                       if type_questions == 'Questions without answers'
     res
   end
 
-  def previous_question(type_questions, current_user_id)
-    Question.scope_questions(type_questions, current_user_id)
-
-  end
-
-  def next_question(type_questions, current_user_id)
-    Question.scope_questions(type_questions, current_user_id)
+  def self.define_question(type_questions, current_user_id, id, is_next)
+    is_answered = nil   if type_questions == 'All questions'
+    is_answered = true  if type_questions == 'Questions with answers'
+    is_answered = false if type_questions == 'Questions without answers'
+    Question.next_or_previous_question(current_user_id, is_answered, is_next, id)
   end
 end

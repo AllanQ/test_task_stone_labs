@@ -6,8 +6,7 @@
   <%= render 'questions/shared_show/question' %>
 </span>
 <div>
-  <%= link_to 'Back to questions', question_category_path(
-                                     @question.question_category_id,
+  <%= link_to 'Back to questions', questions_path(
                                      type_questions: type_questions),
                                    id: 'back', class: 'btn btn-primary' %>
 </div>

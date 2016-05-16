@@ -5,6 +5,7 @@ class QuestionsController < ApplicationController
   def index
     @questions = Question
                    .scope_questions(params[:type_questions], current_user.id)
+                   .order_by_categories
                    .page(params[:page])
                    .per(params[:per])
     @length_questions = @questions.length
