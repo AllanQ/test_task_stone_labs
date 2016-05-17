@@ -62,7 +62,7 @@ class Question < ActiveRecord::Base
     SQL
     find_by_sql(query)
   }
-  
+
   #
   # SELECT *, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC;
   # arr = QuestionCategory.select("*, concat(ancestry || '/', id) AS sort_string").order('sort_string').map{ |c| c.id }
