@@ -63,33 +63,6 @@ class Question < ActiveRecord::Base
     find_by_sql(query)
   }
 
-  #
-  # SELECT *, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC;
-  # arr = QuestionCategory.select("*, concat(ancestry || '/', id) AS sort_string").order('sort_string').map{ |c| c.id }
-  #
-  # CREATE EXTENSION intarray;
-  # SELECT * FROM questions ORDER BY idx(array[1, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id;
-  # Question.all.order("idx(array#{arr}, question_category_id), id")
-  #
-  # SELECT * FROM questions ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id;
-  #
-  #
-  #
-  # SELECT id, lag(id) OVER (ORDER BY idx(array[1, 27, 28, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id) FROM questions;
-  #
-  # SELECT id, lead(id) OVER (ORDER BY idx(array[1, 27, 28, 5, 12, 14, 6, 7, 13, 8, 9, 10, 11, 15, 2, 3], question_category_id), id) FROM questions;
-  #
-  #
-  # SELECT id, lag(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions;
-  #
-  # SELECT id, lead(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions;
-  #
-  #
-  # SELECT * FROM (SELECT *, lead(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions) AS next_questions WHERE lead = 2;
-  #
-  # SELECT * FROM (SELECT *, lag(id) OVER (ORDER BY idx(array(SELECT id FROM (SELECT id, concat(ancestry || '/', id) AS sort_string FROM question_categories ORDER BY sort_string ASC) AS category_id), question_category_id), id) FROM questions) AS next_questions WHERE lag = 1;
-  #
-
   def self.scope_questions(type_questions = 'All questions', current_user_id)
     res = Question.all if type_questions == 'All questions'
     res = Question.joins_answers(current_user_id, true)
