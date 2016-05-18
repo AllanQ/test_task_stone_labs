@@ -62,7 +62,7 @@ class Question < ActiveRecord::Base
     SQL
     find_by_sql(query)
   }
-
+  # CREATE EXTENSION intarray;
   def self.scope_questions(type_questions = 'All questions', current_user_id)
     res = Question.all if type_questions == 'All questions'
     res = Question.joins_answers(current_user_id, true)
