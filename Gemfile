@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.0'
+ruby '2.3.1'
 gem 'ancestry', '2.1.0'
 gem 'bootstrap-kaminari-views', '0.0.5'
 gem 'bootstrap-sass', '3.3.6'
