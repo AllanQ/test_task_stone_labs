@@ -1,8 +1,8 @@
- require 'rails_helper'
+require 'rails_helper'
 
- feature 'welcome page' do
-   scenario 'welcome message' do
-     visit ('/')
-     expect(page).to have_content('Hello')
-   end
+feature 'welcome page' do
+ scenario 'welcome message' do
+   visit ('/')
+   expect(page).to have_content('Hello')
  end
+end

@@ -3,11 +3,15 @@ class QuestionsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @questions = Question
-                   .scope_questions(params[:type_questions], current_user.id)
-                   .order_by_categories
-                   .page(params[:page])
-                   .per(params[:per])
+    if Question.exists?() && QuestionCategory.exists?()
+      @questions = Question
+                     .scope_questions(params[:type_questions], current_user.id)
+                     .order_by_categories
+                     .page(params[:page])
+                     .per(params[:per])
+    else
+      @questions = []
+    end
     @length_questions = @questions.length
     @index_questions = 0
     respond_to do |format|

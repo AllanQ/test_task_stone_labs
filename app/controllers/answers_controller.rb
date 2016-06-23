@@ -23,8 +23,10 @@ class AnswersController < ApplicationController
   end
 
   def destroy
+    question_id = @answer.question_id
     @answer.destroy
-    redirect_to questions_path, status: 303
+# TODO: add AJAX
+    redirect_to question_path question_id
   end
 
   private

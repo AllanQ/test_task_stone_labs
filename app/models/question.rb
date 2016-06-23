@@ -7,6 +7,8 @@ class Question < ActiveRecord::Base
   validates :question_category_id, :text, presence: true
   validates :text, uniqueness: true, length: { minimum: 3 }
 
+  # CREATE EXTENSION intarray;
+
   scope :joins_answers, -> (user_id, is_answered) {
     query = <<-SQL
       LEFT OUTER JOIN answers
@@ -62,7 +64,7 @@ class Question < ActiveRecord::Base
     SQL
     find_by_sql(query)
   }
-  # CREATE EXTENSION intarray;
+
   def self.scope_questions(type_questions = 'All questions', current_user_id)
     res = Question.all if type_questions == 'All questions'
     res = Question.joins_answers(current_user_id, true)

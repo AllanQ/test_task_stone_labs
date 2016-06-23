@@ -1,4 +1,4 @@
-<% if @questions.count == 0  %>
+<% if @questions == []  %>
   <%= render 'questions/shared_index/message',
              message: 'There are not any questions yet' %>
 <% else %>

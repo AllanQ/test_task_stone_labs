@@ -19,10 +19,11 @@ gem 'uglifier', '3.0.0'
 
 group :development, :test do
   gem 'byebug', '8.2.2'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   gem 'pry', '0.10.3'
   gem 'rspec-rails'
   gem 'spring'
+  gem 'spring-commands-cucumber'
   gem 'spring-commands-rspec'
 end
 
@@ -32,4 +33,6 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'cucumber-rails', require: false
+  gem 'database_cleaner'
 end
