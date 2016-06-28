@@ -3,7 +3,6 @@ class Question < ActiveRecord::Base
   has_many   :answers, dependent: :destroy
   has_many   :users, through: :answers
 
-  validates_associated :answers
   validates :question_category_id, :text, presence: true
   validates :text, uniqueness: true, length: { minimum: 3 }
 

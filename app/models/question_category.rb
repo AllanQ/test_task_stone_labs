@@ -1,11 +1,11 @@
 class QuestionCategory < ActiveRecord::Base
   has_many   :questions, dependent: :destroy
 
-  validates_associated :questions
   validates :name, presence: true, uniqueness: true, length: { minimum: 3 }
 
   has_ancestry
 
+  # config/initializers/rails_admin.rb   config.model 'QuestionCategory'
   def parent_enum
     QuestionCategory.where.not(id: id).map { |c| [ c.name, c.id ] }
   end

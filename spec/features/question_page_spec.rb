@@ -8,7 +8,7 @@ feature 'question page' do
                                            ancestry: question_category.id) }
     let(:question) { create(:question,
                             question_category_id: question_category_child.id) }
-    let(:answer) { create(:answer, user_id: user.id,
+    let(:answer) { create(:answer, user: user,
                    question_id: question.id) }
     login_form.visit_page.login_as(user)
     visit('/')

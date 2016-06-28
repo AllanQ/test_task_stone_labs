@@ -39,8 +39,7 @@ describe QuestionsController do
       end
       describe 'GET show' do
         let(:question) { create(:question) }
-        let(:answer) { create(:answer, user_id: user.id,
-                              question_id: question.id) }
+        let(:answer) { create(:answer, user: user, question: question) }
         it 'renders :show template' do
           get :show, id: question  #.id
           expect(response).to render_template(:show)
@@ -120,7 +119,7 @@ describe QuestionsController do
         end
         it 'deletes question from database' do
           delete :destroy, id: question
-          expect(Question.exists?(question.id)).to be_falsy
+          expect(Question.exists?(question.id)).to be_falsey
         end
       end
     end

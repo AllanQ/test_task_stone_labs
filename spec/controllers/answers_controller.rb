@@ -45,7 +45,7 @@ describe AnswersController do
     shared_examples 'full access to answer' do
       describe 'POST create' do
         let(:question) { create(:question) }
-        let(:answer) { attributes_for(:answer, question_id: question.id) }
+        let(:answer) { attributes_for(:answer, question: question) }
         it 'redirects to questions#show' do
           post :create, answer: answer
           expect(response).to redirect_to(question_path(assigns[:question]))
@@ -58,8 +58,7 @@ describe AnswersController do
       end
       describe 'PUT update' do
         let(:question) { create(:question) }
-        let(:answer) { create(:answer, user_id: user.id,
-                              question_id: question.id) }
+        let(:answer) { create(:answer, user: user, question: question) }
         it 'redirects to questions#show' do
           put :update, id: answer, text: 'New Answer'
           expect(response).to redirect_to(question_path(assigns[:question]))
@@ -90,21 +89,21 @@ describe AnswersController do
         sign_in(user)
       end
       describe 'POST create' do
-        answer = attributes_for(:answer, user_id: user.id)
+        answer = attributes_for(:answer, user: user)
         it 'redirects to welcome page' do
           post :create, answer: answer
           expect(response).to redirect_to(root_path)
         end
       end
       describe 'PUT update' do
-        answer = create(:answer, user_id: user.id)
+        answer = create(:answer, user: user)
         it 'redirects to welcome page' do
           put :update, id: answer
           expect(response).to redirect_to(root_path)
         end
       end
       describe 'DELETE destroy' do
-        answer = create(:answer, user_id: user.id)
+        answer = create(:answer, user: user)
         it 'redirects to welcome page' do
           delete :destroy, id: answer
           expect(response).to redirect_to(root_path)
@@ -120,7 +119,7 @@ describe AnswersController do
           sign_in(user_is_not_owner)
         end
         describe 'POST create' do
-          let(:answer) { attributes_for(:answer, user_id: user_owner.id) }
+          let(:answer) { attributes_for(:answer, user: user_owner) }
           it 'redirects to questions#index' do
             post :create, answer: answer
             expect(response).to redirect_to(questions_path)
@@ -132,7 +131,7 @@ describe AnswersController do
           end
         end
         describe 'PUT update' do
-          let(:answer) { create(:answer, user_id: user_owner.id,
+          let(:answer) { create(:answer, user: user_owner,
                                         text: 'Original answer') }
           it 'redirects to questions#index' do
             put :update, id: answer, text: 'New Answer'
@@ -145,7 +144,7 @@ describe AnswersController do
           end
         end
         describe 'DELETE destroy' do
-          let(:answer) { create(:answer, user_id: user_owner.id) }
+          let(:answer) { create(:answer, user: user_owner) }
           it 'redirects to questions#index' do
             delete :destroy, id: answer
             expect(response).to redirect_to(questions_path)

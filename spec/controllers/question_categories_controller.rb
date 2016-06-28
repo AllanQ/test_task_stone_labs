@@ -64,7 +64,7 @@ describe QuestionCategoriesController do
         it_behaves_like 'redirect to questions page'
         it 'deletes question from database' do
           delete :destroy, id: question_category
-          expect(QuestionCategory.exists?(question_category.id)).to be_falsy
+          expect(QuestionCategory.exists?(question_category.id)).to be_falsey
         end
       end
     end
